@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-page-custom-font */
+/* eslint-disable @next/next/google-font-display */
 /* eslint-disable @next/next/no-sync-scripts */
 /* eslint-disable @next/next/no-html-link-for-pages */
 import React, { useEffect } from 'react'
@@ -11,10 +13,10 @@ import {
   Header,
   Anchor,
   Image,
-  RoutedButton,
 } from 'grommet'
 import { useAccount } from '../../hooks/wallet'
 import { connectWallet } from '../../utils/wallet'
+import { useRouter } from 'next/router'
 
 interface Props {
   title: string
@@ -23,6 +25,8 @@ interface Props {
 
 const Layout = ({ title, children }: Props) => {
   const account = useAccount()
+  const router = useRouter()
+
   return (
     <Grommet theme={grommet} full>
       <Head>
@@ -30,6 +34,10 @@ const Layout = ({ title, children }: Props) => {
         <meta name="description" content="方舟" />
         <link rel="icon" href="/favicon.ico" />
         <meta name="referrer" content="no-referrer" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Roboto+Mono"
+        />
       </Head>
 
       <Header
@@ -43,11 +51,13 @@ const Layout = ({ title, children }: Props) => {
           label=""
         />
         <Box align="center" justify="end" direction="row" gap="medium">
-          <RoutedButton
+          <Button
             primary
             color="#333"
             label="Create new DAO"
-            path="/dao/new"
+            onClick={() => {
+              router.push('/dao/new')
+            }}
           />
           <Button
             primary
@@ -59,11 +69,15 @@ const Layout = ({ title, children }: Props) => {
         </Box>
       </Header>
 
-      <ResponsiveContext.Consumer>
-        {(size) => {
-          return <Box style={{ margin: '0 auto', width: 1000 }}>{children}</Box>
-        }}
-      </ResponsiveContext.Consumer>
+      <main>
+        <ResponsiveContext.Consumer>
+          {(size) => {
+            return (
+              <Box style={{ margin: '0 auto', width: 1000 }}>{children}</Box>
+            )
+          }}
+        </ResponsiveContext.Consumer>
+      </main>
     </Grommet>
   )
 }

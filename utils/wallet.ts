@@ -30,12 +30,23 @@ export const connectWallet = async () => {
   return wallet.account()
 }
 
-export const getContract = async () => {
+export const getFactoryContract = async () => {
   const { wallet } = await getNearWallet()
   const account = wallet.account()
   const contract = new Contract(account, CONTRACT_NAME, {
-    viewMethods: ['getIssueLikes'],
-    changeMethods: ['likeIssue'],
+    viewMethods: ['getDAOs', 'getDAO'],
+    changeMethods: ['createDAO'],
+  })
+
+  return contract
+}
+
+export const getDAOContract = async (daoName: string) => {
+  const { wallet } = await getNearWallet()
+  const account = wallet.account()
+  const contract = new Contract(account, `${daoName}.chezhe.testnet`, {
+    viewMethods: ['getBounty', 'getAllBounties'],
+    changeMethods: ['like', 'createBounty'],
   })
 
   return contract

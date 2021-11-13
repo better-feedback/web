@@ -1,31 +1,28 @@
 import { Box, Form, Heading, TextInput, Button, TextArea } from 'grommet'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import Layout from '../../components/Layout'
-import { getFactoryContract } from '../../utils/wallet'
+import Layout from '../../../../components/Layout'
+import { getDAOContract } from '../../../../utils/wallet'
 
-export default function DAONew({}) {
+export default function BountyNew({}) {
   const router = useRouter()
+  const daoName = router.query.did as string
   const [subDAO, setSubDAO] = useState({
-    subName: '',
-    website: '',
-    logoUrl: '',
+    title: '',
     description: '',
   })
 
-  const createDAO = () => {
-    getFactoryContract()
+  const createBounty = () => {
+    getDAOContract(daoName)
       .then((contract: any) => {
-        console.log('--- creating DAO ---', contract)
+        console.log('--- creating Bounty ---', contract)
         contract
-          .createDAO({
-            name: subDAO.subName,
-            url: subDAO.website,
-            logoUrl: subDAO.logoUrl,
+          .createBounty({
+            title: subDAO.title,
             description: subDAO.description,
           })
           .then((tx) => {
-            router.push(`/dao/${subDAO.subName}`)
+            router.back()
           })
           .catch((err) => {
             console.log(err)
@@ -38,31 +35,17 @@ export default function DAONew({}) {
   return (
     <Layout title="New DAO">
       <Box direction="column" align="center" gap="small">
-        <Heading level="2">Create new DAO</Heading>
+        <Heading level="2">Create a bounty</Heading>
         <Form
           value={subDAO}
           onChange={(nextValue) => setSubDAO(nextValue)}
           onSubmit={({ value }) => {}}
-          style={{ width: 400 }}
+          style={{ width: 500 }}
         >
           <TextInput
-            placeholder="DAO name(will be prefix of .better.near)"
-            id="subName"
-            name="subName"
-            style={{ marginBottom: 20 }}
-          />
-          <TextInput
-            placeholder="Project website"
-            id="website"
-            name="website"
-            type="url"
-            style={{ marginBottom: 20 }}
-          />
-          <TextInput
-            placeholder="DAO logo url"
-            id="logoUrl"
-            name="logoUrl"
-            type="url"
+            placeholder="Bounty title"
+            id="title"
+            name="title"
             style={{ marginBottom: 20 }}
           />
           <TextArea
@@ -79,7 +62,7 @@ export default function DAONew({}) {
               primary
               label="Submit"
               color="#333"
-              onClick={createDAO}
+              onClick={createBounty}
             />
           </Box>
         </Form>
