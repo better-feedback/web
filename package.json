@@ -6,15 +6,28 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "asb": "echo 'start compiling contract'",
+    "build:contract": "node contract/compile.js",
+    "build:contract:debug": "node contract/compile.js --debug",
+    "dev:deploy:contract": "near dev-deploy",
+    "deploy:contract": "near deploy --accountId chezhe.testnet",
+    "deploy": "npm run build && npm run deploy:contract && npm run deploy:pages",
+    "prestart": "npm run build:contract:debug && npm run dev:deploy:contract"
   },
   "dependencies": {
+    "grommet": "^2.18.0",
+    "near-api-js": "^0.43.1",
     "next": "12.0.1",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "styled-components": "^5.3.3"
   },
   "devDependencies": {
+    "@types/react": "^17.0.34",
     "eslint": "7.32.0",
-    "eslint-config-next": "11.1.0"
+    "eslint-config-next": "11.1.0",
+    "shelljs": "^0.8.4",
+    "typescript": "^4.4.4"
   }
 }

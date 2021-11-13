@@ -4,6 +4,8 @@
 /node_modules
 /.pnp
 .pnp.js
+contract/node_modules
+contract/build
 
 # testing
 /coverage
@@ -32,3 +34,4 @@ yarn-error.log*
 
 # vercel
 .vercel
+
