@@ -1,10 +1,11 @@
 import { Heading, Box, Button, Image, Text } from 'grommet'
 import router, { useRouter } from 'next/router'
-import FeedbackCard from '../../../components/Cards/Feedback'
+import { Plus } from 'react-feather'
 import FeedbackList from '../../../components/Feedback/List'
 import Layout from '../../../components/Layout'
 import { useDao, useFeedbacks } from '../../../hooks/query'
 import { Status } from '../../../type'
+import { getDAOName } from '../../../utils/common'
 
 const DAOPage = () => {
   const { query } = useRouter()
@@ -24,11 +25,12 @@ const DAOPage = () => {
             {dao && dao.logoUrl && (
               <Image src={dao.logoUrl} alt={daoAddress} height={80} />
             )}
-            <Heading margin="none">{daoAddress}</Heading>
+            <Heading margin="none">{getDAOName(daoAddress)}</Heading>
           </Box>
 
           <Button
-            label="Create a feedback"
+            label="Feedback"
+            icon={<Plus />}
             primary
             onClick={() => {
               router.push(`/dao/${daoAddress}/feedback/new`)

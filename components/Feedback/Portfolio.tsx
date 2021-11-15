@@ -4,7 +4,7 @@ import ButtonWrap from './ButtonWrap'
 import { useAccount } from '../../hooks/wallet'
 import { formatTimestamp } from '../../utils/format'
 import { likeFeedback } from '../../utils/contract'
-import { useFeedbackLikes } from '../../hooks/query'
+import { useCouncil, useFeedbackLikes } from '../../hooks/query'
 import Manage from './Manage'
 import StatusLabel from '../Common/Status'
 
@@ -20,6 +20,7 @@ const Row = ({ title, value }) => {
 export default function Portfolio({ feedback, daoAddress }) {
   const account = useAccount()
   const likes = useFeedbackLikes(daoAddress, feedback?.id)
+  const council = useCouncil(daoAddress)
   if (!feedback) {
     return null
   }
@@ -29,10 +30,12 @@ export default function Portfolio({ feedback, daoAddress }) {
   }
 
   const isLiked = likes.includes(account?.accountId)
+  const isManager = council.includes(account?.accountId)
   return (
     <Box
       direction="column"
       pad="none"
+      background="white"
       style={{ flex: '0 0 300px', border: '1px solid #333' }}
     >
       <Box pad="small" gap="small">
@@ -72,11 +75,13 @@ export default function Portfolio({ feedback, daoAddress }) {
         />
       </Box>
 
-      <Manage
-        status={feedback?.status}
-        daoAddress={daoAddress}
-        feedbackId={feedback?.id}
-      />
+      {isManager && (
+        <Manage
+          status={feedback?.status}
+          daoAddress={daoAddress}
+          feedbackId={feedback?.id}
+        />
+      )}
     </Box>
   )
 }

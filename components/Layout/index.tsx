@@ -17,6 +17,7 @@ import {
 import { useAccount } from '../../hooks/wallet'
 import { connectWallet } from '../../utils/wallet'
 import { useRouter } from 'next/router'
+import { Plus } from 'react-feather'
 
 interface Props {
   title: string
@@ -55,7 +56,8 @@ const Layout = ({ title, children, mainWidth }: Props) => {
           <Button
             primary
             color="#333"
-            label="Create new DAO"
+            label="DAO"
+            icon={<Plus />}
             onClick={() => {
               router.push('/dao/new')
             }}
@@ -64,7 +66,7 @@ const Layout = ({ title, children, mainWidth }: Props) => {
             primary
             color="#008cd5"
             label={account?.accountId ?? 'Connect Near'}
-            onClick={connectWallet}
+            onClick={() => !account?.accountId && connectWallet()}
             icon={<Image src="/near-white.svg" alt="Near" width="24px" />}
           />
         </Box>

@@ -130,3 +130,24 @@ export const useFeedbackLogs = (daoAddress: string, id: number) => {
 
   return logs
 }
+
+export const useCouncil = (daoAddress: string) => {
+  const [council, setCouncil] = useState([])
+
+  useEffect(() => {
+    if (daoAddress) {
+      getDAOContract(daoAddress).then((contract: any) => {
+        contract
+          .getCouncil()
+          .then((logs: any[]) => {
+            setCouncil(logs)
+          })
+          .catch((err) => {
+            console.log(daoAddress, err)
+          })
+      })
+    }
+  }, [daoAddress])
+
+  return council
+}

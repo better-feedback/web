@@ -67,6 +67,7 @@ export const getDAOContract = async (daoName: string) => {
       'getFeedback',
       'getLikes',
       'getLogs',
+      'getCouncil',
     ],
     changeMethods: [
       'createFeedback',
