@@ -33,7 +33,7 @@ const Layout = ({ title, children, mainWidth }: Props) => {
     <Grommet theme={grommet} full>
       <Head>
         <title>{`Better${title ? ` | ${title}` : ''}`}</title>
-        <meta name="description" content="方舟" />
+        <meta name="description" content="" />
         <link rel="icon" href="/favicon.ico" />
         <meta name="referrer" content="no-referrer" />
         <link

@@ -74,7 +74,6 @@ function DAOCard({ name }: { name: string }) {
             ? dayjs(Number(dao?.createdAt) / 1000000).format('MMM DD, YYYY')
             : 'Unknown'}
         </Text>
-        <Text size="small">{dao?.createdBy ?? 'Unknown'}</Text>
       </CardFooter>
     </Card>
   )
