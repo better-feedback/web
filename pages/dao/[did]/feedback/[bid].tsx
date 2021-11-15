@@ -4,22 +4,15 @@ import { useEffect, useState } from 'react'
 import Layout from '../../../../components/Layout'
 import { getDAOContract } from '../../../../utils/wallet'
 import Portfolio from '../../../../components/Bounty/Portfolio'
+import { useFeedback } from '../../../../hooks/query'
 
 const DAOPage = () => {
   const { query } = useRouter()
   const [bounty, setBounty] = useState<any>()
-  const daoId = query.did as string
-  const bountyId = query.bid as string
-  console.log(daoId, bountyId, bounty)
-  useEffect(() => {
-    if (daoId && bountyId) {
-      getDAOContract(daoId).then((contract: any) => {
-        contract.getBounty({ id: bountyId }).then((bounty: any) => {
-          setBounty(bounty)
-        })
-      })
-    }
-  }, [daoId, bountyId])
+  const daoAddress = query.did as string
+  const feedbackId = query.bid as string
+  const feedback = useFeedback(daoAddress, Number(feedbackId))
+  console.log(feedback)
   // if (!bounty) {
   //   return <div>Loading...</div>
   // }
@@ -32,7 +25,7 @@ const DAOPage = () => {
         gap="medium"
         pad={{ vertical: 'medium' }}
       >
-        <Portfolio bounty={bounty} daoId={daoId} bountyId={bountyId} />
+        <Portfolio feedback={feedback} daoAddress={daoAddress} />
         <Box flex="grow" pad="medium" style={{ border: '1px solid #333' }}>
           <Heading margin={{ top: '0px' }}>{bounty?.title}</Heading>
           <Markdown>{bounty?.description ?? ''}</Markdown>

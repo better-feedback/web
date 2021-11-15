@@ -1,44 +1,46 @@
-import { Box, Form, Heading, TextInput, Button, TextArea } from 'grommet'
+import {
+  Box,
+  Form,
+  Heading,
+  TextInput,
+  Button,
+  TextArea,
+  Select,
+} from 'grommet'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import Layout from '../../../../components/Layout'
-import { getDAOContract } from '../../../../utils/wallet'
+import { createFeedback } from '../../../../utils/contract'
 
 export default function BountyNew({}) {
   const router = useRouter()
   const daoName = router.query.did as string
-  const [subDAO, setSubDAO] = useState({
+  const [feedback, setFeedback] = useState({
     title: '',
     description: '',
+    tag: '',
   })
 
-  const createBounty = () => {
-    getDAOContract(daoName)
-      .then((contract: any) => {
-        console.log('--- creating Bounty ---', contract)
-        contract
-          .createBounty({
-            title: subDAO.title,
-            description: subDAO.description,
-          })
-          .then((tx) => {
-            router.back()
-          })
-          .catch((err) => {
-            console.log(err)
-          })
+  const onCreateFeedback = () => {
+    createFeedback(daoName, {
+      title: feedback.title,
+      description: feedback.description,
+      tags: [feedback.tag],
+    })
+      .then((tx) => {
+        router.back()
       })
       .catch((err) => {
         console.log(err)
       })
   }
   return (
-    <Layout title="New DAO">
+    <Layout title="New Feedback">
       <Box direction="column" align="center" gap="small">
-        <Heading level="2">Create a bounty</Heading>
+        <Heading level="2">Create a feedback</Heading>
         <Form
-          value={subDAO}
-          onChange={(nextValue) => setSubDAO(nextValue)}
+          value={feedback}
+          onChange={(nextValue) => setFeedback(nextValue)}
           onSubmit={({ value }) => {}}
           style={{ width: 500 }}
         >
@@ -54,15 +56,26 @@ export default function BountyNew({}) {
             name="description"
             style={{ marginBottom: 20, height: 160 }}
           />
+          <Select
+            id="tag"
+            name="tag"
+            style={{ width: '100%' }}
+            options={['Feature Request', 'Bug', 'Suggestion']}
+          />
 
-          <Box direction="row" justify="center" gap="medium">
+          <Box
+            direction="row"
+            justify="center"
+            gap="medium"
+            style={{ marginTop: 20 }}
+          >
             <Button
               type="submit"
               size="large"
               primary
               label="Submit"
               color="#333"
-              onClick={createBounty}
+              onClick={onCreateFeedback}
             />
           </Box>
         </Form>

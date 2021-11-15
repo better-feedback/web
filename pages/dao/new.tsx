@@ -1,60 +1,39 @@
 import { Box, Form, Heading, TextInput, Button, TextArea } from 'grommet'
-import { useRouter } from 'next/router'
 import { useState } from 'react'
 import Layout from '../../components/Layout'
-import { getFactoryContract } from '../../utils/wallet'
+import { BetterDAO } from '../../type'
+import { createDAO } from '../../utils/contract'
 
 export default function DAONew({}) {
-  const router = useRouter()
-  const [subDAO, setSubDAO] = useState({
-    subName: '',
-    website: '',
+  const [dao, setDAO] = useState<BetterDAO>({
+    name: 'ygg',
+    projectUrl: '',
     logoUrl: '',
-    description: '',
+    description: 'Exit music',
   })
 
-  const createDAO = () => {
-    getFactoryContract()
-      .then((contract: any) => {
-        console.log('--- creating DAO ---', contract)
-        contract
-          .createDAO({
-            name: subDAO.subName,
-            url: subDAO.website,
-            logoUrl: subDAO.logoUrl,
-            description: subDAO.description,
-          })
-          .then((tx) => {
-            router.push(`/dao/${subDAO.subName}`)
-          })
-          .catch((err) => {
-            console.log(err)
-          })
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+  const onCreateDAO = async () => {
+    await createDAO(dao)
   }
   return (
     <Layout title="New DAO">
       <Box direction="column" align="center" gap="small">
         <Heading level="2">Create new DAO</Heading>
         <Form
-          value={subDAO}
-          onChange={(nextValue) => setSubDAO(nextValue)}
-          onSubmit={({ value }) => {}}
+          value={dao}
+          onChange={(nextValue) => setDAO(nextValue)}
           style={{ width: 400 }}
         >
           <TextInput
             placeholder="DAO name(will be prefix of .better.near)"
-            id="subName"
-            name="subName"
+            id="name"
+            name="name"
             style={{ marginBottom: 20 }}
           />
           <TextInput
-            placeholder="Project website"
-            id="website"
-            name="website"
+            placeholder="Project URL"
+            id="projectUrl"
+            name="projectUrl"
             type="url"
             style={{ marginBottom: 20 }}
           />
@@ -79,7 +58,7 @@ export default function DAONew({}) {
               primary
               label="Submit"
               color="#333"
-              onClick={createDAO}
+              onClick={onCreateDAO}
             />
           </Box>
         </Form>

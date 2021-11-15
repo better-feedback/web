@@ -1,48 +1,34 @@
 import { Heading, Box, Button, Image, Text } from 'grommet'
 import router, { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import BountyCard from '../../../components/Cards/Bounty'
+import FeedbackCard from '../../../components/Cards/Feedback'
 import Layout from '../../../components/Layout'
+import { useDao, useFeedbacks } from '../../../hooks/query'
 import { BetterDAO } from '../../../type'
-import { getDAOContract, getFactoryContract } from '../../../utils/wallet'
 
 const DAOPage = () => {
   const { query } = useRouter()
-  const [dao, setDao] = useState<BetterDAO>()
-  const [bounties, setBounties] = useState([])
-  const daoName = query.did as string
-  useEffect(() => {
-    if (!daoName) {
-      return
-    }
-    getDAOContract(daoName).then((contract: any) => {
-      contract.getAllBounties().then((bounties: any) => {
-        setBounties(bounties)
-      })
-    })
-    getFactoryContract().then((contract: any) => {
-      contract.getDAO({ name: daoName }).then((dao: any) => {
-        setDao(dao)
-      })
-    })
-  }, [daoName])
+  const daoAddress = query.did as string
+  const feedbacks = useFeedbacks(daoAddress)
+  const dao = useDao(daoAddress)
+  console.log('###', dao, feedbacks)
 
   return (
-    <Layout title={daoName}>
+    <Layout title={daoAddress}>
       <Box direction="column" pad={{ vertical: 'medium' }}>
         <Box direction="row" align="center" justify="between" width="100%">
           <Box direction="row" align="center">
             {dao && dao.logoUrl && (
-              <Image src={dao.logoUrl} alt={daoName} height={80} />
+              <Image src={dao.logoUrl} alt={daoAddress} height={80} />
             )}
-            <Heading margin="none">{daoName}</Heading>
+            <Heading margin="none">{daoAddress}</Heading>
           </Box>
 
           <Button
-            label="Create a bounty"
+            label="Create a feedback"
             primary
             onClick={() => {
-              router.push(`/dao/${daoName}/bounty/new`)
+              router.push(`/dao/${daoAddress}/feedback/new`)
             }}
           />
         </Box>
@@ -50,8 +36,14 @@ const DAOPage = () => {
       </Box>
 
       <Box direction="column">
-        {bounties.map((bounty: any) => {
-          return <BountyCard dao={dao} bounty={bounty} key={bounty.id} />
+        {feedbacks.map((feedback: any) => {
+          return (
+            <FeedbackCard
+              daoAddress={daoAddress}
+              feedback={feedback}
+              key={feedback.id}
+            />
+          )
         })}
       </Box>
     </Layout>

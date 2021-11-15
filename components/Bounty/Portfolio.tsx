@@ -5,6 +5,7 @@ import { DollarSign, ThumbsUp } from 'react-feather'
 import ButtonWrap from './ButtonWrap'
 import { useAccount } from '../../hooks/wallet'
 import { formatTimestamp } from '../../utils/format'
+import { likeFeedback } from '../../utils/contract'
 
 const Row = ({ title, value }) => {
   return (
@@ -15,20 +16,16 @@ const Row = ({ title, value }) => {
   )
 }
 
-export default function Portfolio({ bounty, daoId, bountyId }) {
+export default function Portfolio({ feedback, daoAddress }) {
   const account = useAccount()
-  if (!bounty) {
+  if (!feedback) {
     return null
   }
-  const likeBounty = () => {
-    getDAOContract(daoId).then((contract: any) => {
-      contract.like({ id: bountyId }).then((result: any) => {
-        console.log(result)
-      })
-    })
+  const onLikeFeedback = () => {
+    likeFeedback(daoAddress, feedback.id)
   }
 
-  const isLiked = bounty.likes.includes(account?.accountId)
+  const isLiked = false //feedback.likes.includes(account?.accountId)
   return (
     <Box
       direction="column"
@@ -37,17 +34,17 @@ export default function Portfolio({ bounty, daoId, bountyId }) {
       style={{ border: '1px solid #333' }}
     >
       <Box pad="small" gap="small">
-        <Row title="Creator" value={bounty.creator} />
+        <Row title="Creator" value={feedback?.creator} />
         <Row
           title="Created at"
-          value={bounty ? formatTimestamp(bounty.createdAt) : ''}
+          value={feedback ? formatTimestamp(feedback.createdAt) : ''}
         />
-        <Row title="Liked" value={bounty.likes.length} />
+        <Row title="Liked" value={feedback?.likes.length ?? '0'} />
         <Row
           title="Funders"
           value={
-            bounty.funders.length
-              ? bounty.funders.length
+            feedback?.funds.length
+              ? feedback.funds.length
               : "There's not funder yet"
           }
         />
@@ -59,7 +56,7 @@ export default function Portfolio({ bounty, daoId, bountyId }) {
           background={isLiked ? 'status-unknown' : 'accent-4'}
           onClick={() => {
             if (!isLiked) {
-              likeBounty()
+              onLikeFeedback()
             }
           }}
           icon={<ThumbsUp size={20} />}

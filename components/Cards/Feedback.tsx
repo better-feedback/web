@@ -11,38 +11,56 @@ import {
 } from 'grommet'
 import { Dribbble, ThumbsUp } from 'react-feather'
 import { BetterBounty, BetterDAO } from '../../type'
-import dayjs from 'dayjs'
 import router from 'next/router'
 import { formatTimestamp } from '../../utils/format'
 
-function BountyCard({ dao, bounty }: { bounty: BetterBounty; dao: BetterDAO }) {
+function BountyCard({
+  daoAddress,
+  feedback,
+}: {
+  feedback: BetterBounty
+  daoAddress: string
+}) {
   return (
     <Card
       background="status-unknown"
       width="100%"
       style={{ margin: 10 }}
       onClick={() => {
-        router.push(`/dao/${dao?.name}/bounty/${bounty.id}`)
+        router.push(`/dao/${daoAddress}/feedback/${feedback.id}`)
       }}
     >
       <CardBody pad="small">
         <Heading level="3" margin={{ vertical: '0px' }}>
-          {bounty.title}
+          {feedback.title}
         </Heading>
-        <Text>{bounty.description}</Text>
+        <Text>{feedback.description}</Text>
+        <Box direction="row" pad={{ top: 'medium' }}>
+          {feedback.tags.map((tag) => {
+            return (
+              <Box
+                key={tag}
+                background="status-ok"
+                pad={{ horizontal: 'small' }}
+              >
+                <Text>{tag}</Text>
+              </Box>
+            )
+          })}
+        </Box>
       </CardBody>
       <CardFooter
         pad={{ horizontal: 'medium', vertical: 'small' }}
         background="rgba(255,255,255,0.2)"
       >
         <Text size="small">{`Created at: ${formatTimestamp(
-          bounty.createdAt
+          feedback.createdAt
         )}`}</Text>
         <Text size="small">
           <ThumbsUp size={18} />
-          <Text>{bounty.likes.length}</Text>
+          {/* <Text>{feedback.likes.length}</Text> */}
         </Text>
-        <Text size="small">{`Created by: ${bounty.creator}`}</Text>
+        {/* <Text size="small">{`Created by: ${bounty.creator}`}</Text> */}
       </CardFooter>
     </Card>
   )
