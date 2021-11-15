@@ -34,8 +34,7 @@ export const useDao = (daoAddress: string): BetterDAO | null => {
         contract
           .getDAO()
           .then((dao: BetterDAO) => {
-            console.log(dao)
-            // setDAO(dao)
+            setDAO(dao)
           })
           .catch((err) => {
             console.log(daoAddress, err)
@@ -56,7 +55,6 @@ export const useFeedbacks = (daoAddress: string): any[] => {
         contract
           .getFeedbacks()
           .then((fbs: any[]) => {
-            console.log('###', daoAddress, fbs)
             setFeedbacks(fbs)
           })
           .catch((err) => {
@@ -70,7 +68,7 @@ export const useFeedbacks = (daoAddress: string): any[] => {
 }
 
 export const useFeedback = (daoAddress: string, id: number) => {
-  const [feedback, setFeedback] = useState()
+  const [feedback, setFeedback] = useState(null)
 
   useEffect(() => {
     if (daoAddress) {
@@ -78,6 +76,7 @@ export const useFeedback = (daoAddress: string, id: number) => {
         contract
           .getFeedback({ id })
           .then((fb: any) => {
+            console.log('###', id, fb)
             setFeedback(fb)
           })
           .catch((err) => {
@@ -88,4 +87,46 @@ export const useFeedback = (daoAddress: string, id: number) => {
   }, [daoAddress, id])
 
   return feedback
+}
+
+export const useFeedbackLikes = (daoAddress: string, id: number) => {
+  const [likes, setLikes] = useState([])
+
+  useEffect(() => {
+    if (daoAddress && typeof id === 'number') {
+      getDAOContract(daoAddress).then((contract: any) => {
+        contract
+          .getLikes({ id })
+          .then((likes: any) => {
+            setLikes(likes)
+          })
+          .catch((err) => {
+            console.log(daoAddress, err)
+          })
+      })
+    }
+  }, [daoAddress, id])
+
+  return likes
+}
+
+export const useFeedbackLogs = (daoAddress: string, id: number) => {
+  const [logs, setLogs] = useState([])
+
+  useEffect(() => {
+    if (daoAddress && typeof id === 'number') {
+      getDAOContract(daoAddress).then((contract: any) => {
+        contract
+          .getLogs({ id })
+          .then((logs: any) => {
+            setLogs(logs)
+          })
+          .catch((err) => {
+            console.log(daoAddress, err)
+          })
+      })
+    }
+  }, [daoAddress, id])
+
+  return logs
 }

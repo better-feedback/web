@@ -23,7 +23,7 @@ body {
 }
 body,
 main {
-  background-color: rgba(243, 244, 246, 1);
+  background-color: #81fced;
 }
 
 #__next > div {
@@ -36,4 +36,8 @@ header {
 
 span {
   word-break: break-all;
+}
+
+#tag {
+  width: 100%;
 }

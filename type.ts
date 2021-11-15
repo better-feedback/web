@@ -1,3 +1,10 @@
+export enum FeedbackTag {
+  BUG = 'bug',
+  FEATURE_REQUEST = 'feature request',
+  SUGGESTION = 'suggestion',
+  OTHER = 'other',
+}
+
 export enum Status {
   UnderReview,
   Accepted,
@@ -12,16 +19,18 @@ export type BetterDAO = {
   logoUrl: string
   description: string
   createdAt?: string
+  createdBy?: string
 }
 
 export type BetterBounty = {
-  id: string
+  id: number
   title: string
   description: string
   likes: string[]
   funders: any[]
   tags: string[]
   createdAt: string
+  createdBy: string
   creator: string
 }
 
@@ -41,7 +50,7 @@ export type FeedbackType = {
   id: number
   title: string
   description: string
-  tags: string[]
+  tags: FeedbackTag[]
   createdAt: number
   createdBy: string
   likes: string[]

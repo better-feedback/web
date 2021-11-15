@@ -60,8 +60,22 @@ export const getDAOContract = async (daoName: string) => {
   const { wallet } = await getNearWallet()
   const account = wallet.account()
   const contract = new Contract(account, daoName, {
-    viewMethods: ['getInfo', 'getDAO', 'getFeedbacks', 'getFeedback'],
-    changeMethods: ['createFeedback', 'likeFeedback'],
+    viewMethods: [
+      'getInfo',
+      'getDAO',
+      'getFeedbacks',
+      'getFeedback',
+      'getLikes',
+      'getLogs',
+    ],
+    changeMethods: [
+      'createFeedback',
+      'likeFeedback',
+      'acceptFeedback',
+      'rejectFeedback',
+      'startFeedback',
+      'completeFeedback',
+    ],
   })
 
   return contract

@@ -10,15 +10,19 @@ import {
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import Layout from '../../../../components/Layout'
+import { FeedbackTag } from '../../../../type'
 import { createFeedback } from '../../../../utils/contract'
 
 export default function BountyNew({}) {
   const router = useRouter()
   const daoName = router.query.did as string
   const [feedback, setFeedback] = useState({
-    title: '',
-    description: '',
-    tag: '',
+    title: 'This is a test',
+    description: `
+      [ ] A
+      [ ] B
+    `,
+    tag: FeedbackTag.BUG,
   })
 
   const onCreateFeedback = () => {
@@ -60,7 +64,12 @@ export default function BountyNew({}) {
             id="tag"
             name="tag"
             style={{ width: '100%' }}
-            options={['Feature Request', 'Bug', 'Suggestion']}
+            options={[
+              FeedbackTag.BUG,
+              FeedbackTag.FEATURE_REQUEST,
+              FeedbackTag.SUGGESTION,
+              FeedbackTag.OTHER,
+            ]}
           />
 
           <Box

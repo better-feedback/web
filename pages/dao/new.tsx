@@ -6,7 +6,7 @@ import { createDAO } from '../../utils/contract'
 
 export default function DAONew({}) {
   const [dao, setDAO] = useState<BetterDAO>({
-    name: 'ygg',
+    name: `test_`,
     projectUrl: '',
     logoUrl: '',
     description: 'Exit music',

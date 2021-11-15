@@ -1,69 +1,48 @@
 import React from 'react'
-import {
-  Box,
-  Card,
-  CardBody,
-  CardFooter,
-  Grid,
-  Grommet,
-  Heading,
-  Text,
-} from 'grommet'
-import { Dribbble, ThumbsUp } from 'react-feather'
-import { BetterBounty, BetterDAO } from '../../type'
+import { Box, Card, CardBody, CardFooter, Heading, Text } from 'grommet'
+import { ThumbsUp } from 'react-feather'
+import { BetterBounty } from '../../type'
 import router from 'next/router'
 import { formatTimestamp } from '../../utils/format'
+import { useFeedbackLikes } from '../../hooks/query'
+import Tags from '../Common/Tags'
 
-function BountyCard({
+function FeedbackCard({
   daoAddress,
   feedback,
 }: {
   feedback: BetterBounty
   daoAddress: string
 }) {
+  const likes = useFeedbackLikes(daoAddress, feedback?.id)
   return (
     <Card
-      background="status-unknown"
-      width="100%"
-      style={{ margin: 10 }}
+      background="light-1"
+      width="300px"
+      style={{ borderRadius: 0, boxShadow: 'none' }}
       onClick={() => {
         router.push(`/dao/${daoAddress}/feedback/${feedback.id}`)
       }}
     >
       <CardBody pad="small">
-        <Heading level="3" margin={{ vertical: '0px' }}>
+        <Heading level="6" margin="none">
           {feedback.title}
         </Heading>
-        <Text>{feedback.description}</Text>
-        <Box direction="row" pad={{ top: 'medium' }}>
-          {feedback.tags.map((tag) => {
-            return (
-              <Box
-                key={tag}
-                background="status-ok"
-                pad={{ horizontal: 'small' }}
-              >
-                <Text>{tag}</Text>
-              </Box>
-            )
-          })}
-        </Box>
+        <Text size="small">{feedback.description}</Text>
+        <Tags tags={feedback?.tags ?? []} />
       </CardBody>
       <CardFooter
-        pad={{ horizontal: 'medium', vertical: 'small' }}
+        pad={{ horizontal: 'small', vertical: 'small' }}
         background="rgba(255,255,255,0.2)"
       >
-        <Text size="small">{`Created at: ${formatTimestamp(
-          feedback.createdAt
-        )}`}</Text>
-        <Text size="small">
+        <Text size="small">{formatTimestamp(feedback.createdAt)}</Text>
+        <Box direction="row" align="center" gap="small">
           <ThumbsUp size={18} />
-          {/* <Text>{feedback.likes.length}</Text> */}
-        </Text>
-        {/* <Text size="small">{`Created by: ${bounty.creator}`}</Text> */}
+          <Text size="small">{likes.length}</Text>
+        </Box>
       </CardFooter>
     </Card>
   )
 }
 
-export default BountyCard
+export default FeedbackCard

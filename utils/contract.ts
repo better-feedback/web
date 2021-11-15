@@ -50,3 +50,48 @@ export const likeFeedback = async (daoAddress: string, feedbackId: number) => {
     throw error
   }
 }
+
+export const acceptFeedback = async (
+  daoAddress: string,
+  feedbackId: number
+) => {
+  try {
+    const contract = (await getDAOContract(daoAddress)) as any
+    await contract.acceptFeedback({ id: feedbackId })
+  } catch (error) {
+    throw error
+  }
+}
+
+export const rejectFeedback = async (
+  daoAddress: string,
+  feedbackId: number
+) => {
+  try {
+    const contract = (await getDAOContract(daoAddress)) as any
+    await contract.rejectFeedback({ id: feedbackId })
+  } catch (error) {
+    throw error
+  }
+}
+
+export const startFeedback = async (daoAddress: string, feedbackId: number) => {
+  try {
+    const contract = (await getDAOContract(daoAddress)) as any
+    await contract.startFeedback({ id: feedbackId })
+  } catch (error) {
+    throw error
+  }
+}
+
+export const completeFeedback = async (
+  daoAddress: string,
+  feedbackId: number
+) => {
+  try {
+    const contract = (await getDAOContract(daoAddress)) as any
+    await contract.completeFeedback({ id: feedbackId })
+  } catch (error) {
+    throw error
+  }
+}

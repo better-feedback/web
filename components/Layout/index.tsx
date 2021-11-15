@@ -21,9 +21,10 @@ import { useRouter } from 'next/router'
 interface Props {
   title: string
   children: any
+  mainWidth?: number | string
 }
 
-const Layout = ({ title, children }: Props) => {
+const Layout = ({ title, children, mainWidth }: Props) => {
   const account = useAccount()
   const router = useRouter()
 
@@ -73,7 +74,9 @@ const Layout = ({ title, children }: Props) => {
         <ResponsiveContext.Consumer>
           {(size) => {
             return (
-              <Box style={{ margin: '0 auto', width: 1000 }}>{children}</Box>
+              <Box style={{ margin: '0 auto', width: mainWidth || 1000 }}>
+                {children}
+              </Box>
             )
           }}
         </ResponsiveContext.Consumer>
