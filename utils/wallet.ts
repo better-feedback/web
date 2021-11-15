@@ -22,10 +22,10 @@ const getNearWallet = async () => {
   return { wallet, near }
 }
 
-const getConnection = () => {
-  const connection = new Connection(nearConfig.nodeUrl, provider, {})
-  return connection
-}
+// const getConnection = () => {
+//   const connection = new Connection(nearConfig.nodeUrl, provider, {})
+//   return connection
+// }
 
 export const getAccount = async () => {
   const { wallet } = await getNearWallet()
@@ -82,7 +82,7 @@ export const getDAOContract = async (daoName: string) => {
   return contract
 }
 
-export const getDAOState = async (daoName: string) => {
-  const state = await new Account(getConnection(), daoName).state()
-  return state
-}
+// export const getDAOState = async (daoName: string) => {
+//   const state = await new Account(getConnection(), daoName).state()
+//   return state
+// }

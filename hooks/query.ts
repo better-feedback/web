@@ -1,10 +1,6 @@
 import { useEffect, useState } from 'react'
 import { BetterDAO } from '../type'
-import {
-  getDAOContract,
-  getDAOState,
-  getFactoryContract,
-} from '../utils/wallet'
+import { getDAOContract, getFactoryContract } from '../utils/wallet'
 
 export const useDaoList = (): string[] => {
   const [daoList, setDaoList] = useState<string[]>([])
