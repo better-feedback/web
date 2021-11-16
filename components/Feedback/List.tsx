@@ -1,6 +1,6 @@
 import { Box, Heading } from 'grommet'
 import { FeedbackType, Status } from '../../type'
-import { getStatusConfig } from '../../utils/common'
+import { getStatusConfig, hexToRGB } from '../../utils/common'
 import FeedbackCard from '../Cards/Feedback'
 
 export default function FeedbackList({

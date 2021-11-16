@@ -11,12 +11,49 @@ export default function DAONew({}) {
     logoUrl: '',
     description: 'Exit music',
   })
+  const [isLoading, setIsLoading] = useState(false)
 
-  const onCreateDAO = async () => {
-    await createDAO(dao)
+  const onCreateDAO = () => {
+    if (!/^[a-z1-9_-]{1,13}$/.test(dao.name)) {
+      alert('Invalid name')
+      return
+    }
+
+    if (
+      dao.projectUrl &&
+      /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/.test(
+        dao.projectUrl
+      )
+    ) {
+      alert('Invalid project url')
+      return
+    }
+
+    if (
+      dao.logoUrl &&
+      /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/.test(dao.logoUrl)
+    ) {
+      alert('Invalid logo url')
+      return
+    }
+
+    if (dao.description.length > 200) {
+      alert('Description too long, no more than 200 characters')
+      return
+    }
+
+    setIsLoading(true)
+    createDAO(dao)
+      .then(() => {
+        setIsLoading(false)
+      })
+      .catch((error) => {
+        alert(error.message)
+        setIsLoading(false)
+      })
   }
   return (
-    <Layout title="New DAO">
+    <Layout title="New DAO" isLoading={isLoading}>
       <Box direction="column" align="center" gap="small">
         <Heading level="2">Create new DAO</Heading>
         <Form
@@ -48,6 +85,7 @@ export default function DAONew({}) {
             placeholder="Description"
             id="description"
             name="description"
+            maxLength={200}
             style={{ marginBottom: 20, height: 160 }}
           />
 

@@ -13,6 +13,7 @@ import {
   Header,
   Anchor,
   Image,
+  Layer,
 } from 'grommet'
 import { useAccount } from '../../hooks/wallet'
 import { connectWallet } from '../../utils/wallet'
@@ -23,9 +24,10 @@ interface Props {
   title: string
   children: any
   mainWidth?: number | string
+  isLoading?: boolean
 }
 
-const Layout = ({ title, children, mainWidth }: Props) => {
+const Layout = ({ title, children, mainWidth, isLoading }: Props) => {
   const account = useAccount()
   const router = useRouter()
 
@@ -40,6 +42,7 @@ const Layout = ({ title, children, mainWidth }: Props) => {
           rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Roboto+Mono"
         />
+        <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js" />
       </Head>
 
       <Header
@@ -82,6 +85,19 @@ const Layout = ({ title, children, mainWidth }: Props) => {
             )
           }}
         </ResponsiveContext.Consumer>
+        {isLoading && (
+          <Layer full background="rgba(0,0,0,0.5)">
+            <Box flex align="center" justify="center">
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: `
+            <lottie-player src="https://assets5.lottiefiles.com/temp/lf20_KBD6AE.json"  background="transparent"  speed="1"  style="width: 300px; height: 300px;"  loop  autoplay></lottie-player>
+          `,
+                }}
+              ></div>
+            </Box>
+          </Layer>
+        )}
       </main>
     </Grommet>
   )

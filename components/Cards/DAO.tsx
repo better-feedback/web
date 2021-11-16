@@ -29,7 +29,7 @@ function DAOCard({ name }: { name: string }) {
 
   return (
     <Card
-      background="status-critical"
+      background="rgba(0, 115, 157, 0.7)"
       width="310px"
       height="300px"
       style={{ margin: 10, position: 'relative' }}

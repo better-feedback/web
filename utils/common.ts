@@ -43,7 +43,7 @@ export const getStatusConfig = (status: Status) => {
       return {
         text: 'Accepted',
         actionName: 'Accept',
-        color: 'neutral-2',
+        color: 'rgba(0, 140, 213, 0.7)',
         actions: [
           {
             icon: 'PlayCircle',
@@ -64,7 +64,7 @@ export const getStatusConfig = (status: Status) => {
       return {
         text: 'In progress',
         actionName: 'Start',
-        color: 'neutral-1',
+        color: 'rgba(0, 135, 61, 0.7)',
         actions: [
           {
             icon: 'Archive',
@@ -77,7 +77,7 @@ export const getStatusConfig = (status: Status) => {
       return {
         text: 'Completed',
         actionName: 'Finish',
-        color: 'status-critical',
+        color: 'rgba(255, 64, 64, 0.7)',
         icons: [],
         actions: [],
       }
@@ -96,4 +96,15 @@ export const getDAOName = (name: string) => {
     return ''
   }
   return name.split('.')[0]
+}
+
+export function hexToRGB(hex) {
+  return hex
+    .replace(
+      /^#?([a-f\d])([a-f\d])([a-f\d])$/i,
+      (m, r, g, b) => '#' + r + r + g + g + b + b
+    )
+    .substring(1)
+    .match(/.{2}/g)
+    .map((x) => parseInt(x, 16))
 }

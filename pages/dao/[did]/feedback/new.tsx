@@ -12,20 +12,28 @@ import { useState } from 'react'
 import Layout from '../../../../components/Layout'
 import { FeedbackTag } from '../../../../type'
 import { createFeedback } from '../../../../utils/contract'
+import _ from 'lodash'
 
 export default function BountyNew({}) {
   const router = useRouter()
   const daoName = router.query.did as string
+  const [isLoading, setIsLoading] = useState(false)
   const [feedback, setFeedback] = useState({
-    title: 'This is a test',
-    description: `
-      [ ] A
-      [ ] B
-    `,
+    title: '',
+    description: ``,
     tag: FeedbackTag.BUG,
   })
 
   const onCreateFeedback = () => {
+    if (feedback.title.length > 100) {
+      alert('title is too long')
+      return
+    }
+    if (feedback.description.length > 1000) {
+      alert('description is too long')
+      return
+    }
+    setIsLoading(true)
     createFeedback(daoName, {
       title: feedback.title,
       description: feedback.description,
@@ -33,13 +41,15 @@ export default function BountyNew({}) {
     })
       .then((tx) => {
         router.back()
+        setIsLoading(false)
       })
-      .catch((err) => {
-        console.log(err)
+      .catch((error) => {
+        setIsLoading(false)
+        alert(error.message)
       })
   }
   return (
-    <Layout title="New Feedback">
+    <Layout title="New Feedback" isLoading={isLoading}>
       <Box direction="column" align="center" gap="small">
         <Heading level="2">Create a feedback</Heading>
         <Form
@@ -53,12 +63,14 @@ export default function BountyNew({}) {
             id="title"
             name="title"
             style={{ marginBottom: 20 }}
+            maxLength={100}
           />
           <TextArea
             placeholder="Description"
             id="description"
             name="description"
             style={{ marginBottom: 20, height: 160 }}
+            maxLength={2000}
           />
           <Select
             id="tag"

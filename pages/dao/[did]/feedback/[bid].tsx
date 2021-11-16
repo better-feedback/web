@@ -5,6 +5,7 @@ import Portfolio from '../../../../components/Feedback/Portfolio'
 import { useFeedback, useFeedbackLogs } from '../../../../hooks/query'
 import { getDAOName, getTagColor } from '../../../../utils/common'
 import Logs from '../../../../components/Logs'
+import { useState } from 'react'
 
 const DAOPage = () => {
   const { query } = useRouter()
@@ -12,9 +13,10 @@ const DAOPage = () => {
   const feedbackId = query.bid as string
   const feedback = useFeedback(daoAddress, Number(feedbackId))
   const logs = useFeedbackLogs(daoAddress, Number(feedbackId))
+  const [isLoading, setIsLoading] = useState(false)
 
   return (
-    <Layout title={feedback?.title ?? ''}>
+    <Layout title={feedback?.title ?? ''} isLoading={isLoading}>
       <Box pad="small" />
       <Anchor label={getDAOName(daoAddress)} href={`/dao/${daoAddress}`} />
       <Box
@@ -24,11 +26,15 @@ const DAOPage = () => {
         gap="medium"
         pad={{ vertical: 'medium' }}
       >
-        <Portfolio feedback={feedback} daoAddress={daoAddress} />
+        <Portfolio
+          feedback={feedback}
+          daoAddress={daoAddress}
+          setIsLoading={setIsLoading}
+        />
 
         <Box width="680px">
           <Box flex="grow" background="white" pad="medium" gap="small">
-            <Heading level={3} margin="none">
+            <Heading level={2} margin="none">
               {feedback?.title}
             </Heading>
 

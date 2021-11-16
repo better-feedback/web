@@ -17,7 +17,7 @@ const Row = ({ title, value }) => {
   )
 }
 
-export default function Portfolio({ feedback, daoAddress }) {
+export default function Portfolio({ feedback, daoAddress, setIsLoading }) {
   const account = useAccount()
   const likes = useFeedbackLikes(daoAddress, feedback?.id)
   const council = useCouncil(daoAddress)
@@ -26,7 +26,15 @@ export default function Portfolio({ feedback, daoAddress }) {
   }
 
   const onLikeFeedback = () => {
+    setIsLoading(true)
     likeFeedback(daoAddress, feedback.id)
+      .then(() => {
+        setIsLoading(false)
+        window.location.reload()
+      })
+      .catch(() => {
+        setIsLoading(false)
+      })
   }
 
   const isLiked = likes.includes(account?.accountId)

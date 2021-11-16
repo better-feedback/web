@@ -7,7 +7,7 @@ import StatusLabel from './Common/Status'
 export default function Logs({ logs }: { logs: Log[] }) {
   return (
     <Box background="white" pad="medium" margin={{ top: 'medium' }}>
-      <Heading level={2} margin="none">
+      <Heading level={3} margin="none">
         Logs
       </Heading>
       <Box pad={{ vertical: 'medium' }} direction="column-reverse">
