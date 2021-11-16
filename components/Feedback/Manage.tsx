@@ -1,7 +1,7 @@
 import { Box } from 'grommet'
 import * as Icons from 'react-feather'
-import { Status } from '../../type'
-import { getStatusConfig } from '../../utils/common'
+import { Status, ToastType } from '../../type'
+import { getStatusConfig, toast } from '../../utils/common'
 import ButtonWrap from './ButtonWrap'
 
 export default function Manage({
@@ -27,6 +27,12 @@ export default function Manage({
             background={color}
             onClick={() => {
               call(daoAddress, feedbackId)
+                .then(() => {
+                  window.location.reload()
+                })
+                .catch((error) => {
+                  toast(ToastType.ERROR, error.message)
+                })
             }}
           />
         )

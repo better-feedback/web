@@ -10,9 +10,10 @@ import {
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import Layout from '../../../../components/Layout'
-import { FeedbackTag } from '../../../../type'
+import { FeedbackTag, ToastType } from '../../../../type'
 import { createFeedback } from '../../../../utils/contract'
 import _ from 'lodash'
+import { toast } from '../../../../utils/common'
 
 export default function BountyNew({}) {
   const router = useRouter()
@@ -26,11 +27,11 @@ export default function BountyNew({}) {
 
   const onCreateFeedback = () => {
     if (feedback.title.length > 100) {
-      alert('title is too long')
+      toast(ToastType.ERROR, 'Title is too long')
       return
     }
     if (feedback.description.length > 1000) {
-      alert('description is too long')
+      toast(ToastType.ERROR, 'Description is too long')
       return
     }
     setIsLoading(true)
@@ -45,7 +46,7 @@ export default function BountyNew({}) {
       })
       .catch((error) => {
         setIsLoading(false)
-        alert(error.message)
+        toast(ToastType.ERROR, error.message)
       })
   }
   return (

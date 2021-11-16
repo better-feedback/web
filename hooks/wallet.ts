@@ -1,5 +1,7 @@
 import { ConnectedWalletAccount } from 'near-api-js'
 import { useState, useEffect } from 'react'
+import { ToastType } from '../type'
+import { toast } from '../utils/common'
 import { getAccount } from '../utils/wallet'
 
 export const useAccount = () => {
@@ -10,7 +12,9 @@ export const useAccount = () => {
         .then((account) => {
           setAccount(account)
         })
-        .catch((error) => {})
+        .catch((error) => {
+          toast(ToastType.ERROR, error.message)
+        })
     }
   }, [account])
 

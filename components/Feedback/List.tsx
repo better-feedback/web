@@ -21,7 +21,7 @@ export default function FeedbackList({
       style={{
         minWidth: 'unset',
         maxWidth: 'unset',
-        flex: '0 0 300px',
+        flex: '0 0 400px',
         borderRadius: 8,
       }}
     >
@@ -31,7 +31,7 @@ export default function FeedbackList({
       >
         {text}
       </Heading>
-      <Box gap="small">
+      <Box gap="xxsmall" style={{ minHeight: 'unset' }}>
         {list.map((feedback: any) => {
           return (
             <FeedbackCard

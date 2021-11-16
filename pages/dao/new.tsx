@@ -1,44 +1,54 @@
-import { Box, Form, Heading, TextInput, Button, TextArea } from 'grommet'
+import {
+  Box,
+  Form,
+  Heading,
+  TextInput,
+  Button,
+  TextArea,
+  MaskedInput,
+  Text,
+} from 'grommet'
 import { useState } from 'react'
 import Layout from '../../components/Layout'
-import { BetterDAO } from '../../type'
+import { BetterDAO, ToastType } from '../../type'
+import { toast } from '../../utils/common'
 import { createDAO } from '../../utils/contract'
 
 export default function DAONew({}) {
   const [dao, setDAO] = useState<BetterDAO>({
-    name: `test_`,
+    name: ``,
     projectUrl: '',
     logoUrl: '',
-    description: 'Exit music',
+    description: '',
   })
   const [isLoading, setIsLoading] = useState(false)
 
   const onCreateDAO = () => {
     if (!/^[a-z1-9_-]{1,13}$/.test(dao.name)) {
-      alert('Invalid name')
+      toast(ToastType.ERROR, 'Invalid DAO name')
       return
     }
 
     if (
       dao.projectUrl &&
-      /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/.test(
+      !/^(https?:\/\/)?([\da-z\.-]+\.[a-z\.]{2,6}|[\d\.]+)([\/:?=&#]{1}[\da-z\.-]+)*[\/\?]?$/.test(
         dao.projectUrl
       )
     ) {
-      alert('Invalid project url')
+      toast(ToastType.ERROR, 'Invalid project url')
       return
     }
 
     if (
       dao.logoUrl &&
-      /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/.test(dao.logoUrl)
+      !/(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/.test(dao.logoUrl)
     ) {
-      alert('Invalid logo url')
+      toast(ToastType.ERROR, 'Invalid logo url')
       return
     }
 
     if (dao.description.length > 200) {
-      alert('Description too long, no more than 200 characters')
+      toast(ToastType.ERROR, 'Description too long')
       return
     }
 
@@ -48,7 +58,7 @@ export default function DAONew({}) {
         setIsLoading(false)
       })
       .catch((error) => {
-        alert(error.message)
+        toast(ToastType.ERROR, error.message)
         setIsLoading(false)
       })
   }
@@ -61,34 +71,37 @@ export default function DAONew({}) {
           onChange={(nextValue) => setDAO(nextValue)}
           style={{ width: 400 }}
         >
-          <TextInput
-            placeholder="DAO name(will be prefix of .better.near)"
+          <Text weight="bold">DAO name</Text>
+          <MaskedInput
+            mask={[{ regexp: /^[a-z1-9_-]{1,13}$/ }, { fixed: '.better.near' }]}
             id="name"
             name="name"
-            style={{ marginBottom: 20 }}
+            style={{ marginBottom: 10, marginTop: 5 }}
           />
-          <TextInput
-            placeholder="Project URL"
+          <Text weight="bold">Project URL</Text>
+          <MaskedInput
+            mask={[{ fixed: 'https://' }, { regexp: /^.*$/ }]}
             id="projectUrl"
             name="projectUrl"
             type="url"
-            style={{ marginBottom: 20 }}
+            style={{ marginBottom: 10, marginTop: 5 }}
           />
-          <TextInput
-            placeholder="DAO logo url"
+          <Text weight="bold">Logo URL</Text>
+          <MaskedInput
+            mask={[{ fixed: 'https://' }, { regexp: /^.*(svg|png|jpg|jpeg)$/ }]}
             id="logoUrl"
             name="logoUrl"
             type="url"
-            style={{ marginBottom: 20 }}
+            style={{ marginBottom: 10, marginTop: 5 }}
           />
+          <Text weight="bold">Description</Text>
           <TextArea
             placeholder="Description"
             id="description"
             name="description"
             maxLength={200}
-            style={{ marginBottom: 20, height: 160 }}
+            style={{ marginBottom: 10, marginTop: 5, height: 160 }}
           />
-
           <Box direction="row" justify="center" gap="medium">
             <Button
               type="submit"

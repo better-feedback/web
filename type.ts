@@ -1,3 +1,13 @@
+export enum ToastType {
+  ERROR,
+  SUCCESS,
+}
+
+export type Toaster = {
+  type: ToastType
+  message: string
+}
+
 export enum FeedbackTag {
   BUG = 'bug',
   FEATURE_REQUEST = 'feature request',

@@ -7,6 +7,10 @@ import { formatTimestamp } from '../../utils/format'
 import { useFeedbackLikes } from '../../hooks/query'
 import Tags from '../Common/Tags'
 
+function digestDesc(desc: string) {
+  return desc.length > 100 ? desc.substr(0, 100) + '...' : desc
+}
+
 function FeedbackCard({
   daoAddress,
   feedback,
@@ -18,24 +22,25 @@ function FeedbackCard({
   return (
     <Card
       background="light-1"
-      width="300px"
-      style={{ borderRadius: 0, boxShadow: 'none' }}
+      width="100%"
+      style={{ borderRadius: 0, boxShadow: 'none', overflow: 'auto' }}
       onClick={() => {
         router.push(`/dao/${daoAddress}/feedback/${feedback.id}`)
       }}
     >
-      <CardBody pad="small">
+      <CardBody pad="small" style={{ minHeight: 'unset', paddingBottom: 0 }}>
         <Heading level="6" margin="none">
           {feedback.title}
         </Heading>
-        <Text size="small">{feedback.description}</Text>
-        <Tags tags={feedback?.tags ?? []} />
+        <Text size="small">{digestDesc(feedback.description ?? '')}</Text>
       </CardBody>
       <CardFooter
         pad={{ horizontal: 'small', vertical: 'small' }}
         background="rgba(255,255,255,0.2)"
+        align="center"
       >
-        <Text size="small">{formatTimestamp(feedback.createdAt)}</Text>
+        {/* <Text size="small">{formatTimestamp(feedback.createdAt)}</Text> */}
+        <Tags tags={feedback.tags ?? []} />
         <Box direction="row" align="center" gap="small">
           <ThumbsUp size={18} />
           <Text size="small">{likes.length}</Text>

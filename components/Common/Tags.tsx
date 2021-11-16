@@ -4,7 +4,7 @@ import { getTagColor } from '../../utils/common'
 
 export default function Tags({ tags }: { tags: string[] }) {
   return (
-    <Box direction="row" pad={{ top: 'small' }}>
+    <Box direction="row">
       {tags.map((tag) => {
         return (
           <Box

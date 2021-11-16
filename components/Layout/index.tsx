@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/google-font-display */
 /* eslint-disable @next/next/no-sync-scripts */
 /* eslint-disable @next/next/no-html-link-for-pages */
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
 import {
   Box,
@@ -13,12 +13,14 @@ import {
   Header,
   Anchor,
   Image,
-  Layer,
+  Main,
 } from 'grommet'
 import { useAccount } from '../../hooks/wallet'
 import { connectWallet } from '../../utils/wallet'
 import { useRouter } from 'next/router'
 import { Plus } from 'react-feather'
+import LoadingMask from '../Common/LoadingMask'
+import ToasterContainer from '../Common/ToasterContainer'
 
 interface Props {
   title: string
@@ -30,6 +32,7 @@ interface Props {
 const Layout = ({ title, children, mainWidth, isLoading }: Props) => {
   const account = useAccount()
   const router = useRouter()
+  const [noti, setNoti] = useState(null)
 
   return (
     <Grommet theme={grommet} full>
@@ -75,7 +78,7 @@ const Layout = ({ title, children, mainWidth, isLoading }: Props) => {
         </Box>
       </Header>
 
-      <main>
+      <Main>
         <ResponsiveContext.Consumer>
           {(size) => {
             return (
@@ -85,20 +88,9 @@ const Layout = ({ title, children, mainWidth, isLoading }: Props) => {
             )
           }}
         </ResponsiveContext.Consumer>
-        {isLoading && (
-          <Layer full background="rgba(0,0,0,0.5)">
-            <Box flex align="center" justify="center">
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: `
-            <lottie-player src="https://assets5.lottiefiles.com/temp/lf20_KBD6AE.json"  background="transparent"  speed="1"  style="width: 300px; height: 300px;"  loop  autoplay></lottie-player>
-          `,
-                }}
-              ></div>
-            </Box>
-          </Layer>
-        )}
-      </main>
+        {isLoading && <LoadingMask />}
+        <ToasterContainer />
+      </Main>
     </Grommet>
   )
 }

@@ -1,10 +1,18 @@
-import { FeedbackTag, Status } from '../type'
+import PubSub from 'pubsub-js'
+import { FeedbackTag, Status, ToastType } from '../type'
 import {
   acceptFeedback,
   completeFeedback,
   rejectFeedback,
   startFeedback,
 } from './contract'
+
+export const toast = (type: ToastType, message: string) => {
+  PubSub.publish('toast', {
+    type,
+    message,
+  })
+}
 
 export const getTagColor = (tag: FeedbackTag) => {
   switch (tag) {
@@ -43,7 +51,7 @@ export const getStatusConfig = (status: Status) => {
       return {
         text: 'Accepted',
         actionName: 'Accept',
-        color: 'rgba(0, 140, 213, 0.7)',
+        color: 'rgba(0, 140, 213, 0.5)',
         actions: [
           {
             icon: 'PlayCircle',
@@ -64,7 +72,7 @@ export const getStatusConfig = (status: Status) => {
       return {
         text: 'In progress',
         actionName: 'Start',
-        color: 'rgba(0, 135, 61, 0.7)',
+        color: 'rgba(0, 135, 61, 0.5)',
         actions: [
           {
             icon: 'Archive',
@@ -77,7 +85,7 @@ export const getStatusConfig = (status: Status) => {
       return {
         text: 'Completed',
         actionName: 'Finish',
-        color: 'rgba(255, 64, 64, 0.7)',
+        color: 'rgba(255, 64, 64, 0.5)',
         icons: [],
         actions: [],
       }

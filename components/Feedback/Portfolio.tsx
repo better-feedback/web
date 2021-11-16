@@ -7,6 +7,8 @@ import { likeFeedback } from '../../utils/contract'
 import { useCouncil, useFeedbackLikes } from '../../hooks/query'
 import Manage from './Manage'
 import StatusLabel from '../Common/Status'
+import { toast } from '../../utils/common'
+import { ToastType } from '../../type'
 
 const Row = ({ title, value }) => {
   return (
@@ -32,7 +34,8 @@ export default function Portfolio({ feedback, daoAddress, setIsLoading }) {
         setIsLoading(false)
         window.location.reload()
       })
-      .catch(() => {
+      .catch((error) => {
+        toast(ToastType.ERROR, error.message)
         setIsLoading(false)
       })
   }

@@ -26,6 +26,10 @@ main {
   background-color: #81fced;
 }
 
+main {
+  height: unset !important;
+}
+
 #__next > div {
   background-color: unset;
 }
