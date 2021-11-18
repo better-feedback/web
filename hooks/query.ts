@@ -42,108 +42,27 @@ export const useDao = (daoAddress: string): BetterDAO | null => {
   return dao
 }
 
-export const useFeedbacks = (daoAddress: string): any[] => {
-  const [feedbacks, setFeedbacks] = useState([])
+export const useDAOviewMethod = (
+  daoAddress: string,
+  methodName: string,
+  params: any,
+  defaultValue: any
+) => {
+  const [value, setValue] = useState(defaultValue)
 
   useEffect(() => {
     if (daoAddress) {
       getDAOContract(daoAddress).then((contract: any) => {
-        contract
-          .getFeedbacks()
-          .then((fbs: any[]) => {
-            setFeedbacks(fbs)
+        contract[methodName](params)
+          .then((value: any) => {
+            setValue(value)
           })
           .catch((err) => {
-            console.log(daoAddress, err)
+            console.log('###useDAOviewMethod', daoAddress, methodName, err)
           })
       })
     }
-  }, [daoAddress])
+  }, [daoAddress, methodName, params])
 
-  return feedbacks
-}
-
-export const useFeedback = (daoAddress: string, id: number) => {
-  const [feedback, setFeedback] = useState(null)
-
-  useEffect(() => {
-    if (daoAddress) {
-      getDAOContract(daoAddress).then((contract: any) => {
-        contract
-          .getFeedback({ id })
-          .then((fb: any) => {
-            console.log('###', id, fb)
-            setFeedback(fb)
-          })
-          .catch((err) => {
-            console.log(daoAddress, err)
-          })
-      })
-    }
-  }, [daoAddress, id])
-
-  return feedback
-}
-
-export const useFeedbackLikes = (daoAddress: string, id: number) => {
-  const [likes, setLikes] = useState([])
-
-  useEffect(() => {
-    if (daoAddress && typeof id === 'number') {
-      getDAOContract(daoAddress).then((contract: any) => {
-        contract
-          .getLikes({ id })
-          .then((likes: any) => {
-            setLikes(likes)
-          })
-          .catch((err) => {
-            console.log(daoAddress, err)
-          })
-      })
-    }
-  }, [daoAddress, id])
-
-  return likes
-}
-
-export const useFeedbackLogs = (daoAddress: string, id: number) => {
-  const [logs, setLogs] = useState([])
-
-  useEffect(() => {
-    if (daoAddress && typeof id === 'number') {
-      getDAOContract(daoAddress).then((contract: any) => {
-        contract
-          .getLogs({ id })
-          .then((logs: any) => {
-            setLogs(logs)
-          })
-          .catch((err) => {
-            console.log(daoAddress, err)
-          })
-      })
-    }
-  }, [daoAddress, id])
-
-  return logs
-}
-
-export const useCouncil = (daoAddress: string) => {
-  const [council, setCouncil] = useState([])
-
-  useEffect(() => {
-    if (daoAddress) {
-      getDAOContract(daoAddress).then((contract: any) => {
-        contract
-          .getCouncil()
-          .then((logs: any[]) => {
-            setCouncil(logs)
-          })
-          .catch((err) => {
-            console.log(daoAddress, err)
-          })
-      })
-    }
-  }, [daoAddress])
-
-  return council
+  return value
 }

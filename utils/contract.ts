@@ -1,10 +1,9 @@
 import BN from 'bn.js'
-import { BetterDAO, ToastType } from '../type'
+import { BetterDAO } from '../type'
 import { getDAOContract, getFactoryContract } from './wallet'
 import _ from 'lodash'
 import router from 'next/router'
 import { CONTRACT_NAME } from './config'
-import { toast } from './common'
 
 export const createDAO = async (dao: BetterDAO) => {
   const contract = (await getFactoryContract()) as any

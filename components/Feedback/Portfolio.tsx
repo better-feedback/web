@@ -4,7 +4,7 @@ import ButtonWrap from './ButtonWrap'
 import { useAccount } from '../../hooks/wallet'
 import { formatTimestamp } from '../../utils/format'
 import { likeFeedback } from '../../utils/contract'
-import { useCouncil, useFeedbackLikes } from '../../hooks/query'
+import { useDAOviewMethod } from '../../hooks/query'
 import Manage from './Manage'
 import StatusLabel from '../Common/Status'
 import { toast } from '../../utils/common'
@@ -21,8 +21,13 @@ const Row = ({ title, value }) => {
 
 export default function Portfolio({ feedback, daoAddress, setIsLoading }) {
   const account = useAccount()
-  const likes = useFeedbackLikes(daoAddress, feedback?.id)
-  const council = useCouncil(daoAddress)
+  const likes = useDAOviewMethod(
+    daoAddress,
+    'getLikes',
+    { id: feedback?.id },
+    []
+  )
+  const council = useDAOviewMethod(daoAddress, 'getCouncil', undefined, [])
   if (!feedback) {
     return null
   }

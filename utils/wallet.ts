@@ -10,7 +10,7 @@ import {
 import { getConfig, CONTRACT_NAME } from './config'
 
 const nearConfig = getConfig('testnet')
-const provider = new providers.JsonRpcProvider(nearConfig.nodeUrl)
+// const provider = new providers.JsonRpcProvider(nearConfig.nodeUrl)
 
 const getNearWallet = async () => {
   const near = await connect({
@@ -61,21 +61,22 @@ export const getDAOContract = async (daoName: string) => {
   const account = wallet.account()
   const contract = new Contract(account, daoName, {
     viewMethods: [
-      'getInfo',
       'getDAO',
-      'getFeedbacks',
-      'getFeedback',
+      'getIssues',
+      'getIssue',
       'getLikes',
       'getLogs',
+      'getDAOInfo',
       'getCouncil',
+      'getCategories',
     ],
     changeMethods: [
-      'createFeedback',
-      'likeFeedback',
-      'acceptFeedback',
-      'rejectFeedback',
-      'startFeedback',
-      'completeFeedback',
+      'createIssue',
+      'likeIssue',
+      'acceptIssue',
+      'rejectIssue',
+      'startIssue',
+      'completeIssue',
     ],
   })
 

@@ -3,21 +3,21 @@ import router, { useRouter } from 'next/router'
 import { Plus } from 'react-feather'
 import FeedbackList from '../../../components/Feedback/List'
 import Layout from '../../../components/Layout'
-import { useDao, useFeedbacks } from '../../../hooks/query'
+import { useDao, useDAOviewMethod } from '../../../hooks/query'
 import { Status } from '../../../type'
 import { getDAOName } from '../../../utils/common'
 
 const DAOPage = () => {
   const { query } = useRouter()
   const daoAddress = query.did as string
-  const feedbacks = useFeedbacks(daoAddress)
+  const issues = useDAOviewMethod(daoAddress, 'getIssues', undefined, [])
   const dao = useDao(daoAddress)
 
   return (
-    <Layout title={daoAddress} mainWidth="100%">
+    <Layout title={daoAddress}>
       <Box
         direction="column"
-        style={{ width: 1000, margin: '0 auto' }}
+        style={{ width: 1200, margin: '0 auto' }}
         pad={{ vertical: 'medium' }}
       >
         <Box direction="row" align="center" justify="between" width="100%">
@@ -47,29 +47,29 @@ const DAOPage = () => {
         style={{ overflowX: 'scroll' }}
         gap="medium"
       >
-        <FeedbackList
-          status={Status.UnderReview}
-          feedbacks={feedbacks}
+        {/* <FeedbackList
+          status={Status.Open}
+          issues={issues}
           daoAddress={daoAddress}
         />
         <FeedbackList
-          status={Status.Accepted}
-          feedbacks={feedbacks}
+          status={Status.Planned}
+          issues={issues}
           daoAddress={daoAddress}
-        />
+        /> */}
         <FeedbackList
           status={Status.InProgress}
-          feedbacks={feedbacks}
+          issues={issues}
           daoAddress={daoAddress}
         />
         <FeedbackList
           status={Status.Completed}
-          feedbacks={feedbacks}
+          issues={issues}
           daoAddress={daoAddress}
         />
         <FeedbackList
-          status={Status.Rejected}
-          feedbacks={feedbacks}
+          status={Status.Closed}
+          issues={issues}
           daoAddress={daoAddress}
         />
       </Box>

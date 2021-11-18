@@ -1,11 +1,48 @@
 import PubSub from 'pubsub-js'
-import { FeedbackTag, Status, ToastType } from '../type'
+import { BetterDAO, FeedbackTag, Status, ToastType } from '../type'
 import {
   acceptFeedback,
   completeFeedback,
   rejectFeedback,
   startFeedback,
 } from './contract'
+
+export const validateDAOForm = (dao: BetterDAO): boolean => {
+  if (!/^[a-z1-9_-]{1,13}$/.test(dao.name)) {
+    toast(ToastType.ERROR, 'Invalid DAO name')
+    return false
+  }
+
+  if (
+    dao.projectUrl &&
+    !/^(https?:\/\/)?([\da-z\.-]+\.[a-z\.]{2,6}|[\d\.]+)([\/:?=&#]{1}[\da-z\.-]+)*[\/\?]?$/.test(
+      dao.projectUrl
+    )
+  ) {
+    toast(ToastType.ERROR, 'Invalid project url')
+    return false
+  }
+
+  if (
+    dao.logoUrl &&
+    !/(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png|svg)/.test(dao.logoUrl)
+  ) {
+    toast(ToastType.ERROR, 'Invalid logo url')
+    return false
+  }
+
+  if (dao.description.length > 200) {
+    toast(ToastType.ERROR, 'Description too long')
+    return false
+  }
+
+  if (dao.categories.some((t) => !t)) {
+    toast(ToastType.ERROR, 'Invalid categories')
+    return false
+  }
+
+  return true
+}
 
 export const toast = (type: ToastType, message: string) => {
   PubSub.publish('toast', {
@@ -29,7 +66,7 @@ export const getTagColor = (tag: FeedbackTag) => {
 
 export const getStatusConfig = (status: Status) => {
   switch (status) {
-    case Status.UnderReview:
+    case Status.Open:
       return {
         text: 'Under review',
         actionName: '',
@@ -37,17 +74,17 @@ export const getStatusConfig = (status: Status) => {
         actions: [
           {
             icon: 'CheckCircle',
-            nextStatus: Status.Accepted,
+            nextStatus: Status.Planned,
             call: acceptFeedback,
           },
           {
             icon: 'XCircle',
-            nextStatus: Status.Rejected,
+            nextStatus: Status.Closed,
             call: rejectFeedback,
           },
         ],
       }
-    case Status.Accepted:
+    case Status.Planned:
       return {
         text: 'Accepted',
         actionName: 'Accept',
@@ -60,7 +97,7 @@ export const getStatusConfig = (status: Status) => {
           },
         ],
       }
-    case Status.Rejected:
+    case Status.Closed:
       return {
         text: 'Rejected',
         actionName: 'Reject',

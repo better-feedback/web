@@ -82,7 +82,7 @@ const Layout = ({ title, children, mainWidth, isLoading }: Props) => {
         <ResponsiveContext.Consumer>
           {(size) => {
             return (
-              <Box style={{ margin: '0 auto', width: mainWidth || 1000 }}>
+              <Box style={{ margin: '0 auto', width: mainWidth || 1200 }}>
                 {children}
               </Box>
             )

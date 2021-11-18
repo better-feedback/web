@@ -3,8 +3,7 @@ import { Box, Card, CardBody, CardFooter, Heading, Text } from 'grommet'
 import { ThumbsUp } from 'react-feather'
 import { BetterBounty } from '../../type'
 import router from 'next/router'
-import { formatTimestamp } from '../../utils/format'
-import { useFeedbackLikes } from '../../hooks/query'
+import { useDAOviewMethod } from '../../hooks/query'
 import Tags from '../Common/Tags'
 
 function digestDesc(desc: string) {
@@ -18,7 +17,12 @@ function FeedbackCard({
   feedback: BetterBounty
   daoAddress: string
 }) {
-  const likes = useFeedbackLikes(daoAddress, feedback?.id)
+  const likes = useDAOviewMethod(
+    daoAddress,
+    'getLikes',
+    { id: feedback?.id },
+    []
+  )
   return (
     <Card
       background="light-1"

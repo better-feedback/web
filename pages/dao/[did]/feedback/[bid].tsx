@@ -2,7 +2,7 @@ import { Heading, Box, Button, Markdown, Text, Anchor } from 'grommet'
 import { useRouter } from 'next/router'
 import Layout from '../../../../components/Layout'
 import Portfolio from '../../../../components/Feedback/Portfolio'
-import { useFeedback, useFeedbackLogs } from '../../../../hooks/query'
+import { useDAOviewMethod } from '../../../../hooks/query'
 import { getDAOName, getTagColor } from '../../../../utils/common'
 import Logs from '../../../../components/Logs'
 import { useState } from 'react'
@@ -11,8 +11,20 @@ const DAOPage = () => {
   const { query } = useRouter()
   const daoAddress = query.did as string
   const feedbackId = query.bid as string
-  const feedback = useFeedback(daoAddress, Number(feedbackId))
-  const logs = useFeedbackLogs(daoAddress, Number(feedbackId))
+  const feedback = useDAOviewMethod(
+    daoAddress,
+    'getFeedback',
+    {
+      id: Number(feedbackId),
+    },
+    null
+  )
+  const logs = useDAOviewMethod(
+    daoAddress,
+    'getLogs',
+    { id: Number(feedbackId) },
+    []
+  )
   const [isLoading, setIsLoading] = useState(false)
 
   return (

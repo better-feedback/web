@@ -9,16 +9,17 @@ export type Toaster = {
 }
 
 export enum FeedbackTag {
-  BUG = 'bug',
-  FEATURE_REQUEST = 'feature request',
-  SUGGESTION = 'suggestion',
-  OTHER = 'other',
+  BUG = 'Bug',
+  FEATURE_REQUEST = 'Feature Request',
+  UI = 'UI',
+  OTHER = 'Other',
+  SMART_CONTRACT = 'Smart Contract',
 }
 
 export enum Status {
-  UnderReview,
-  Accepted,
-  Rejected,
+  Open,
+  Planned,
+  Closed,
   InProgress,
   Completed,
 }
@@ -28,6 +29,7 @@ export type BetterDAO = {
   projectUrl: string
   logoUrl: string
   description: string
+  categories?: string[]
   createdAt?: string
   createdBy?: string
 }

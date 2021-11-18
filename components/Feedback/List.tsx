@@ -5,15 +5,15 @@ import FeedbackCard from '../Cards/Feedback'
 
 export default function FeedbackList({
   status,
-  feedbacks,
+  issues,
   daoAddress,
 }: {
   status: Status
-  feedbacks: FeedbackType[]
+  issues: FeedbackType[]
   daoAddress: string
 }) {
   const { text, color } = getStatusConfig(status)
-  const list = feedbacks.filter((feedback) => feedback.status === status)
+  const list = issues.filter((feedback) => feedback.status === status)
   return (
     <Box
       background={color}
@@ -21,7 +21,7 @@ export default function FeedbackList({
       style={{
         minWidth: 'unset',
         maxWidth: 'unset',
-        flex: '0 0 400px',
+        flex: '0 0 360px',
         borderRadius: 8,
       }}
     >

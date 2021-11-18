@@ -14,6 +14,7 @@ import { FeedbackTag, ToastType } from '../../../../type'
 import { createFeedback } from '../../../../utils/contract'
 import _ from 'lodash'
 import { toast } from '../../../../utils/common'
+import { useDAOviewMethod } from '../../../../hooks/query'
 
 export default function BountyNew({}) {
   const router = useRouter()
@@ -24,6 +25,8 @@ export default function BountyNew({}) {
     description: ``,
     tag: FeedbackTag.BUG,
   })
+
+  const categories = useDAOviewMethod(daoName, 'getCategories', undefined, [])
 
   const onCreateFeedback = () => {
     if (feedback.title.length > 100) {
@@ -50,9 +53,9 @@ export default function BountyNew({}) {
       })
   }
   return (
-    <Layout title="New Feedback" isLoading={isLoading}>
+    <Layout title="Create an issue" isLoading={isLoading}>
       <Box direction="column" align="center" gap="small">
-        <Heading level="2">Create a feedback</Heading>
+        <Heading level="2">Create an issue</Heading>
         <Form
           value={feedback}
           onChange={(nextValue) => setFeedback(nextValue)}
@@ -77,12 +80,15 @@ export default function BountyNew({}) {
             id="tag"
             name="tag"
             style={{ width: '100%' }}
-            options={[
-              FeedbackTag.BUG,
-              FeedbackTag.FEATURE_REQUEST,
-              FeedbackTag.SUGGESTION,
-              FeedbackTag.OTHER,
-            ]}
+            options={
+              categories || [
+                FeedbackTag.BUG,
+                FeedbackTag.FEATURE_REQUEST,
+                FeedbackTag.SMART_CONTRACT,
+                FeedbackTag.UI,
+                FeedbackTag.OTHER,
+              ]
+            }
           />
 
           <Box

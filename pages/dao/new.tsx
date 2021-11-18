@@ -9,51 +9,31 @@ import {
   Text,
 } from 'grommet'
 import { useState } from 'react'
+import TagsInput from '../../components/Common/TagsInput'
 import Layout from '../../components/Layout'
 import { BetterDAO, ToastType } from '../../type'
-import { toast } from '../../utils/common'
+import { toast, validateDAOForm } from '../../utils/common'
 import { createDAO } from '../../utils/contract'
+
+const DEFAULT_CATEGORIES = ['Bug', 'Feature Request', 'UI', 'Smart Contract']
 
 export default function DAONew({}) {
   const [dao, setDAO] = useState<BetterDAO>({
-    name: ``,
-    projectUrl: '',
-    logoUrl: '',
+    name: 'btc',
+    projectUrl: 'https://bitcoin.org/',
+    logoUrl: 'https://cryptologos.cc/logos/bitcoin-btc-logo.svg',
     description: '',
   })
+  const [categories, setCategories] = useState<string[]>(DEFAULT_CATEGORIES)
   const [isLoading, setIsLoading] = useState(false)
 
   const onCreateDAO = () => {
-    if (!/^[a-z1-9_-]{1,13}$/.test(dao.name)) {
-      toast(ToastType.ERROR, 'Invalid DAO name')
-      return
-    }
-
-    if (
-      dao.projectUrl &&
-      !/^(https?:\/\/)?([\da-z\.-]+\.[a-z\.]{2,6}|[\d\.]+)([\/:?=&#]{1}[\da-z\.-]+)*[\/\?]?$/.test(
-        dao.projectUrl
-      )
-    ) {
-      toast(ToastType.ERROR, 'Invalid project url')
-      return
-    }
-
-    if (
-      dao.logoUrl &&
-      !/(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/.test(dao.logoUrl)
-    ) {
-      toast(ToastType.ERROR, 'Invalid logo url')
-      return
-    }
-
-    if (dao.description.length > 200) {
-      toast(ToastType.ERROR, 'Description too long')
+    if (!validateDAOForm({ ...dao, categories })) {
       return
     }
 
     setIsLoading(true)
-    createDAO(dao)
+    createDAO({ ...dao, categories })
       .then(() => {
         setIsLoading(false)
       })
@@ -69,11 +49,11 @@ export default function DAONew({}) {
         <Form
           value={dao}
           onChange={(nextValue) => setDAO(nextValue)}
-          style={{ width: 400 }}
+          style={{ width: 500 }}
         >
           <Text weight="bold">DAO name</Text>
-          <MaskedInput
-            mask={[{ regexp: /^[a-z1-9_-]{1,13}$/ }, { fixed: '.better.near' }]}
+          <TextInput
+            placeholder="will be prefix of .better.near"
             id="name"
             name="name"
             style={{ marginBottom: 10, marginTop: 5 }}
@@ -94,6 +74,17 @@ export default function DAONew({}) {
             type="url"
             style={{ marginBottom: 10, marginTop: 5 }}
           />
+
+          <Text weight="bold">Categories</Text>
+          <TagsInput
+            value={categories}
+            onAdd={(tag) => setCategories([...categories, tag])}
+            onRemove={(tag) =>
+              setCategories(categories.filter((t) => t !== tag))
+            }
+            onChange={() => {}}
+          />
+
           <Text weight="bold">Description</Text>
           <TextArea
             placeholder="Description"
@@ -102,9 +93,14 @@ export default function DAONew({}) {
             maxLength={200}
             style={{ marginBottom: 10, marginTop: 5, height: 160 }}
           />
-          <Box direction="row" justify="center" gap="medium">
+
+          <Box
+            direction="row"
+            justify="center"
+            gap="medium"
+            margin={{ top: '10px' }}
+          >
             <Button
-              type="submit"
               size="large"
               primary
               label="Submit"

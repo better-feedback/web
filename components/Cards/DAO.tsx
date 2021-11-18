@@ -2,7 +2,7 @@ import React from 'react'
 import { Box, Card, CardBody, CardFooter, Image, Heading, Text } from 'grommet'
 import dayjs from 'dayjs'
 import router from 'next/router'
-import { useDao } from '../../hooks/query'
+import { useDao, useDAOLogoURL, useDAOviewMethod } from '../../hooks/query'
 import { Trash } from 'react-feather'
 import { useAccount } from '../../hooks/wallet'
 import { CONTRACT_NAME } from '../../utils/config'
@@ -26,11 +26,13 @@ const Identifier = ({ children, title, subTitle, size, ...rest }) => (
 function DAOCard({ name }: { name: string }) {
   const dao = useDao(name)
   const account = useAccount()
+  // const info = useDAOviewMethod(name, 'getDAOInfo')
+  // console.log('info', info)
 
   return (
     <Card
       background="rgba(0, 115, 157, 0.7)"
-      width="310px"
+      width="280px"
       height="300px"
       style={{ margin: 10, position: 'relative' }}
       onClick={() => {
