@@ -1,7 +1,7 @@
 import { Heading, Box, Button, Image, Text } from 'grommet'
 import router, { useRouter } from 'next/router'
 import { Plus } from 'react-feather'
-import FeedbackList from '../../../components/Feedback/List'
+import FeedbackList from '../../../components/Issue/List'
 import Layout from '../../../components/Layout'
 import { useDao, useDAOviewMethod } from '../../../hooks/query'
 import { Status } from '../../../type'
@@ -29,11 +29,11 @@ const DAOPage = () => {
           </Box>
 
           <Button
-            label="Feedback"
+            label="Issue"
             icon={<Plus />}
             primary
             onClick={() => {
-              router.push(`/dao/${daoAddress}/feedback/new`)
+              router.push(`/dao/${daoAddress}/issue/new`)
             }}
           />
         </Box>

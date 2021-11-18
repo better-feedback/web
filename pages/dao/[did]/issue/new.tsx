@@ -10,7 +10,7 @@ import {
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import Layout from '../../../../components/Layout'
-import { FeedbackTag, ToastType } from '../../../../type'
+import { IssueCategory, ToastType } from '../../../../type'
 import { createFeedback } from '../../../../utils/contract'
 import _ from 'lodash'
 import { toast } from '../../../../utils/common'
@@ -20,28 +20,28 @@ export default function BountyNew({}) {
   const router = useRouter()
   const daoName = router.query.did as string
   const [isLoading, setIsLoading] = useState(false)
-  const [feedback, setFeedback] = useState({
+  const [issue, setFeedback] = useState({
     title: '',
     description: ``,
-    tag: FeedbackTag.BUG,
+    tag: IssueCategory.BUG,
   })
 
   const categories = useDAOviewMethod(daoName, 'getCategories', undefined, [])
 
   const onCreateFeedback = () => {
-    if (feedback.title.length > 100) {
+    if (issue.title.length > 100) {
       toast(ToastType.ERROR, 'Title is too long')
       return
     }
-    if (feedback.description.length > 1000) {
+    if (issue.description.length > 1000) {
       toast(ToastType.ERROR, 'Description is too long')
       return
     }
     setIsLoading(true)
     createFeedback(daoName, {
-      title: feedback.title,
-      description: feedback.description,
-      tags: [feedback.tag],
+      title: issue.title,
+      description: issue.description,
+      tags: [issue.tag],
     })
       .then((tx) => {
         router.back()
@@ -57,7 +57,7 @@ export default function BountyNew({}) {
       <Box direction="column" align="center" gap="small">
         <Heading level="2">Create an issue</Heading>
         <Form
-          value={feedback}
+          value={issue}
           onChange={(nextValue) => setFeedback(nextValue)}
           onSubmit={({ value }) => {}}
           style={{ width: 500 }}
@@ -82,11 +82,11 @@ export default function BountyNew({}) {
             style={{ width: '100%' }}
             options={
               categories || [
-                FeedbackTag.BUG,
-                FeedbackTag.FEATURE_REQUEST,
-                FeedbackTag.SMART_CONTRACT,
-                FeedbackTag.UI,
-                FeedbackTag.OTHER,
+                IssueCategory.BUG,
+                IssueCategory.FEATURE_REQUEST,
+                IssueCategory.SMART_CONTRACT,
+                IssueCategory.UI,
+                IssueCategory.OTHER,
               ]
             }
           />

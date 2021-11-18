@@ -19,22 +19,17 @@ const Row = ({ title, value }) => {
   )
 }
 
-export default function Portfolio({ feedback, daoAddress, setIsLoading }) {
+export default function Portfolio({ issue, daoAddress, setIsLoading }) {
   const account = useAccount()
-  const likes = useDAOviewMethod(
-    daoAddress,
-    'getLikes',
-    { id: feedback?.id },
-    []
-  )
+  const likes = useDAOviewMethod(daoAddress, 'getLikes', { id: issue?.id }, [])
   const council = useDAOviewMethod(daoAddress, 'getCouncil', undefined, [])
-  if (!feedback) {
+  if (!issue) {
     return null
   }
 
   const onLikeFeedback = () => {
     setIsLoading(true)
-    likeFeedback(daoAddress, feedback.id)
+    likeFeedback(daoAddress, issue.id)
       .then(() => {
         setIsLoading(false)
         window.location.reload()
@@ -55,19 +50,17 @@ export default function Portfolio({ feedback, daoAddress, setIsLoading }) {
       style={{ flex: '0 0 300px', border: '1px solid #333' }}
     >
       <Box pad="small" gap="small">
-        <Row title="Creator" value={feedback?.createdBy} />
+        <Row title="Creator" value={issue?.createdBy} />
         <Row
           title="Created at"
-          value={feedback ? formatTimestamp(feedback.createdAt) : ''}
+          value={issue ? formatTimestamp(issue.createdAt) : ''}
         />
-        <Row title="Status" value={<StatusLabel status={feedback.status} />} />
+        <Row title="Status" value={<StatusLabel status={issue.status} />} />
         <Row title="Liked" value={likes.length} />
         <Row
           title="Funders"
           value={
-            feedback?.funds.length
-              ? feedback.funds.length
-              : "There's not funder yet"
+            issue?.funds.length ? issue.funds.length : "There's not funder yet"
           }
         />
       </Box>
@@ -93,9 +86,9 @@ export default function Portfolio({ feedback, daoAddress, setIsLoading }) {
 
       {isManager && (
         <Manage
-          status={feedback?.status}
+          status={issue?.status}
           daoAddress={daoAddress}
-          feedbackId={feedback?.id}
+          feedbackId={issue?.id}
         />
       )}
     </Box>

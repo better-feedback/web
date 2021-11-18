@@ -26,9 +26,9 @@ export const deleteDAO = async (daoAddress: string) => {
   await contract.deleteDAO({ name: daoAddress })
 }
 
-export const createFeedback = async (daoAddress: string, feedback: any) => {
+export const createFeedback = async (daoAddress: string, issue: any) => {
   const contract = (await getDAOContract(daoAddress)) as any
-  await contract.createFeedback(feedback)
+  await contract.createFeedback(issue)
 }
 
 export const likeFeedback = async (daoAddress: string, feedbackId: number) => {

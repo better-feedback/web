@@ -1,5 +1,5 @@
 import PubSub from 'pubsub-js'
-import { BetterDAO, FeedbackTag, Status, ToastType } from '../type'
+import { BetterDAO, IssueCategory, Status, ToastType } from '../type'
 import {
   acceptFeedback,
   completeFeedback,
@@ -51,13 +51,13 @@ export const toast = (type: ToastType, message: string) => {
   })
 }
 
-export const getTagColor = (tag: FeedbackTag) => {
+export const getTagColor = (tag: IssueCategory) => {
   switch (tag) {
-    case FeedbackTag.BUG:
+    case IssueCategory.BUG:
       return 'status-error'
-    case FeedbackTag.FEATURE_REQUEST:
+    case IssueCategory.FEATURE_REQUEST:
       return 'status-warning'
-    case FeedbackTag.SUGGESTION:
+    case IssueCategory.UI:
       return 'status-ok'
     default:
       return 'dark-3'

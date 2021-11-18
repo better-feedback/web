@@ -1,7 +1,7 @@
 import { Heading, Box, Button, Markdown, Text, Anchor } from 'grommet'
 import { useRouter } from 'next/router'
 import Layout from '../../../../components/Layout'
-import Portfolio from '../../../../components/Feedback/Portfolio'
+import Portfolio from '../../../../components/Issue/Portfolio'
 import { useDAOviewMethod } from '../../../../hooks/query'
 import { getDAOName, getTagColor } from '../../../../utils/common'
 import Logs from '../../../../components/Logs'
@@ -11,7 +11,7 @@ const DAOPage = () => {
   const { query } = useRouter()
   const daoAddress = query.did as string
   const feedbackId = query.bid as string
-  const feedback = useDAOviewMethod(
+  const issue = useDAOviewMethod(
     daoAddress,
     'getFeedback',
     {
@@ -28,7 +28,7 @@ const DAOPage = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   return (
-    <Layout title={feedback?.title ?? ''} isLoading={isLoading}>
+    <Layout title={issue?.title ?? ''} isLoading={isLoading}>
       <Box pad="small" />
       <Anchor label={getDAOName(daoAddress)} href={`/dao/${daoAddress}`} />
       <Box
@@ -39,7 +39,7 @@ const DAOPage = () => {
         pad={{ vertical: 'medium' }}
       >
         <Portfolio
-          feedback={feedback}
+          issue={issue}
           daoAddress={daoAddress}
           setIsLoading={setIsLoading}
         />
@@ -47,12 +47,12 @@ const DAOPage = () => {
         <Box width="680px">
           <Box flex="grow" background="white" pad="medium" gap="small">
             <Heading level={2} margin="none">
-              {feedback?.title}
+              {issue?.title}
             </Heading>
 
-            <Markdown>{feedback?.description ?? ''}</Markdown>
+            <Markdown>{issue?.description ?? ''}</Markdown>
             <Box direction="row">
-              {(feedback?.tags ?? []).map((tag) => (
+              {(issue?.tags ?? []).map((tag) => (
                 <Box
                   key={tag}
                   background={getTagColor(tag)}

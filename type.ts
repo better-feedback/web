@@ -8,7 +8,7 @@ export type Toaster = {
   message: string
 }
 
-export enum FeedbackTag {
+export enum IssueCategory {
   BUG = 'Bug',
   FEATURE_REQUEST = 'Feature Request',
   UI = 'UI',
@@ -34,7 +34,7 @@ export type BetterDAO = {
   createdBy?: string
 }
 
-export type BetterBounty = {
+export type Issue = {
   id: number
   title: string
   description: string
@@ -44,6 +44,7 @@ export type BetterBounty = {
   createdAt: string
   createdBy: string
   creator: string
+  category: string
 }
 
 export type Fund = {
@@ -58,11 +59,11 @@ export type Log = {
   sender: string
 }
 
-export type FeedbackType = {
+export type IssueType = {
   id: number
   title: string
   description: string
-  tags: FeedbackTag[]
+  tags: IssueCategory[]
   createdAt: number
   createdBy: string
   likes: string[]

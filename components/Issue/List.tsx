@@ -1,7 +1,7 @@
 import { Box, Heading } from 'grommet'
-import { FeedbackType, Status } from '../../type'
+import { IssueType, Status } from '../../type'
 import { getStatusConfig, hexToRGB } from '../../utils/common'
-import FeedbackCard from '../Cards/Feedback'
+import FeedbackCard from '../Cards/Issue'
 
 export default function FeedbackList({
   status,
@@ -9,11 +9,11 @@ export default function FeedbackList({
   daoAddress,
 }: {
   status: Status
-  issues: FeedbackType[]
+  issues: IssueType[]
   daoAddress: string
 }) {
   const { text, color } = getStatusConfig(status)
-  const list = issues.filter((feedback) => feedback.status === status)
+  const list = issues.filter((issue) => issue.status === status)
   return (
     <Box
       background={color}
@@ -32,11 +32,11 @@ export default function FeedbackList({
         {text}
       </Heading>
       <Box gap="xxsmall" style={{ minHeight: 'unset' }}>
-        {list.map((feedback: any) => {
+        {list.map((issue: any) => {
           return (
             <FeedbackCard
-              key={feedback.id}
-              feedback={feedback}
+              key={issue.id}
+              issue={issue}
               daoAddress={daoAddress}
             />
           )
