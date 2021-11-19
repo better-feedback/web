@@ -2,7 +2,7 @@ import { Anchor, Box, Heading, Text } from 'grommet'
 import _ from 'lodash'
 import { Log } from '../type'
 import { formatTimestamp } from '../utils/format'
-import StatusLabel from './Common/Status'
+import StatusLabel from './Common/StatusLabel'
 
 export default function Logs({ logs }: { logs: Log[] }) {
   return (

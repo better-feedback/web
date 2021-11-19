@@ -6,7 +6,6 @@ import { useDaoList } from '../hooks/query'
 export default function Home() {
   const daoList = useDaoList()
 
-  console.log(daoList)
   return (
     <Layout title="Home">
       <Box direction="row" wrap pad={{ vertical: '30px' }}>

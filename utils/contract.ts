@@ -26,41 +26,32 @@ export const deleteDAO = async (daoAddress: string) => {
   await contract.deleteDAO({ name: daoAddress })
 }
 
-export const createFeedback = async (daoAddress: string, issue: any) => {
+export const createIssue = async (daoAddress: string, issue: any) => {
   const contract = (await getDAOContract(daoAddress)) as any
-  await contract.createFeedback(issue)
+  await contract.createIssue(issue)
 }
 
-export const likeFeedback = async (daoAddress: string, feedbackId: number) => {
+export const likeIssue = async (daoAddress: string, feedbackId: number) => {
   const contract = (await getDAOContract(daoAddress)) as any
-  await contract.likeFeedback({ id: feedbackId })
+  await contract.likeIssue({ id: feedbackId })
 }
 
-export const acceptFeedback = async (
-  daoAddress: string,
-  feedbackId: number
-) => {
+export const approveIssue = async (daoAddress: string, feedbackId: number) => {
   const contract = (await getDAOContract(daoAddress)) as any
-  await contract.acceptFeedback({ id: feedbackId })
+  await contract.approveIssue({ id: feedbackId })
 }
 
-export const rejectFeedback = async (
-  daoAddress: string,
-  feedbackId: number
-) => {
+export const closeIssue = async (daoAddress: string, feedbackId: number) => {
   const contract = (await getDAOContract(daoAddress)) as any
-  await contract.rejectFeedback({ id: feedbackId })
+  await contract.closeIssue({ id: feedbackId })
 }
 
-export const startFeedback = async (daoAddress: string, feedbackId: number) => {
+export const startIssue = async (daoAddress: string, feedbackId: number) => {
   const contract = (await getDAOContract(daoAddress)) as any
-  await contract.startFeedback({ id: feedbackId })
+  await contract.startIssue({ id: feedbackId })
 }
 
-export const completeFeedback = async (
-  daoAddress: string,
-  feedbackId: number
-) => {
+export const completeIssue = async (daoAddress: string, feedbackId: number) => {
   const contract = (await getDAOContract(daoAddress)) as any
-  await contract.completeFeedback({ id: feedbackId })
+  await contract.completeIssue({ id: feedbackId })
 }

@@ -48,6 +48,7 @@ export const useDAOviewMethod = (
   params: any,
   defaultValue: any
 ) => {
+  console.log('###', methodName)
   const [value, setValue] = useState(defaultValue)
 
   useEffect(() => {

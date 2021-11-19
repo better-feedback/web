@@ -3,16 +3,19 @@ import { DollarSign, ThumbsUp } from 'react-feather'
 import ButtonWrap from './ButtonWrap'
 import { useAccount } from '../../hooks/wallet'
 import { formatTimestamp } from '../../utils/format'
-import { likeFeedback } from '../../utils/contract'
+import { likeIssue } from '../../utils/contract'
 import { useDAOviewMethod } from '../../hooks/query'
 import Manage from './Manage'
-import StatusLabel from '../Common/Status'
+import StatusLabel from '../Common/StatusLabel'
 import { toast } from '../../utils/common'
 import { ToastType } from '../../type'
+import { useMemo } from 'react'
+import LikedBy from './LikedBy'
+import CategoryLabel from '../Common/CategoryLabel'
 
 const Row = ({ title, value }) => {
   return (
-    <Box>
+    <Box gap="xsmall">
       <Text size="small">{title}</Text>
       {typeof value === 'string' ? <Text>{value}</Text> : value}
     </Box>
@@ -21,15 +24,23 @@ const Row = ({ title, value }) => {
 
 export default function Portfolio({ issue, daoAddress, setIsLoading }) {
   const account = useAccount()
-  const likes = useDAOviewMethod(daoAddress, 'getLikes', { id: issue?.id }, [])
+  const params = useMemo(() => ({ id: issue?.id }), [issue.id])
+  const likes = useDAOviewMethod(daoAddress, 'getLikes', params, [])
   const council = useDAOviewMethod(daoAddress, 'getCouncil', undefined, [])
   if (!issue) {
-    return null
+    return (
+      <Box
+        direction="column"
+        pad="none"
+        background="white"
+        style={{ flex: '0 0 400px', height: 400, border: '1px solid #333' }}
+      ></Box>
+    )
   }
 
-  const onLikeFeedback = () => {
+  const onLikeIssue = () => {
     setIsLoading(true)
-    likeFeedback(daoAddress, issue.id)
+    likeIssue(daoAddress, issue.id)
       .then(() => {
         setIsLoading(false)
         window.location.reload()
@@ -47,22 +58,30 @@ export default function Portfolio({ issue, daoAddress, setIsLoading }) {
       direction="column"
       pad="none"
       background="white"
-      style={{ flex: '0 0 300px', border: '1px solid #333' }}
+      style={{ flex: '0 0 300px' }}
     >
       <Box pad="small" gap="small">
-        <Row title="Creator" value={issue?.createdBy} />
+        <Row
+          title="Category"
+          value={<CategoryLabel category={issue.category} />}
+        />
+        <Row title="Status" value={<StatusLabel status={issue.status} />} />
+        <Row title="Created by" value={issue.createdBy} />
         <Row
           title="Created at"
           value={issue ? formatTimestamp(issue.createdAt) : ''}
         />
-        <Row title="Status" value={<StatusLabel status={issue.status} />} />
-        <Row title="Liked" value={likes.length} />
-        <Row
-          title="Funders"
-          value={
-            issue?.funds.length ? issue.funds.length : "There's not funder yet"
-          }
-        />
+        <Row title="Liked by" value={<LikedBy likes={likes} />} />
+        {issue.fundable && (
+          <Row
+            title="Funders"
+            value={
+              issue?.funds.length
+                ? issue.funds.length
+                : "There's not funder yet"
+            }
+          />
+        )}
       </Box>
 
       <Box direction="row" justify="between">
@@ -71,17 +90,19 @@ export default function Portfolio({ issue, daoAddress, setIsLoading }) {
           background={isLiked ? 'status-unknown' : 'accent-4'}
           onClick={() => {
             if (!isLiked) {
-              onLikeFeedback()
+              onLikeIssue()
             }
           }}
           icon={<ThumbsUp size={20} />}
         />
-        <ButtonWrap
-          title="Fund"
-          background="status-ok"
-          onClick={() => {}}
-          icon={<DollarSign size={20} />}
-        />
+        {issue.fundable && (
+          <ButtonWrap
+            title="Fund"
+            background="status-ok"
+            onClick={() => {}}
+            icon={<DollarSign size={20} />}
+          />
+        )}
       </Box>
 
       {isManager && (
@@ -89,6 +110,7 @@ export default function Portfolio({ issue, daoAddress, setIsLoading }) {
           status={issue?.status}
           daoAddress={daoAddress}
           feedbackId={issue?.id}
+          setIsLoading={setIsLoading}
         />
       )}
     </Box>

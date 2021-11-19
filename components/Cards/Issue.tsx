@@ -1,52 +1,56 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Box, Card, CardBody, CardFooter, Heading, Text } from 'grommet'
-import { ThumbsUp } from 'react-feather'
+import { ChevronsUp, ChevronUp, ThumbsUp } from 'react-feather'
 import { Issue } from '../../type'
 import router from 'next/router'
 import { useDAOviewMethod } from '../../hooks/query'
-import Tags from '../Common/Tags'
+import CategoryLabel from '../Common/CategoryLabel'
 
 function digestDesc(desc: string) {
   return desc.length > 100 ? desc.substr(0, 100) + '...' : desc
 }
 
-function FeedbackCard({
+function IssueCard({
   daoAddress,
   issue,
+  color,
 }: {
   issue: Issue
   daoAddress: string
+  color: string
 }) {
-  const likes = useDAOviewMethod(daoAddress, 'getLikes', { id: issue?.id }, [])
+  const params = useMemo(() => ({ id: issue?.id }), [issue.id])
+  const likes = useDAOviewMethod(daoAddress, 'getLikes', params, [])
   return (
-    <Card
-      background="light-1"
-      width="100%"
-      style={{ borderRadius: 0, boxShadow: 'none', overflow: 'auto' }}
+    <Box
+      direction="row"
+      align="center"
+      justify="between"
+      pad="small"
+      gap="small"
       onClick={() => {
         router.push(`/dao/${daoAddress}/issue/${issue.id}`)
       }}
     >
-      <CardBody pad="small" style={{ minHeight: 'unset', paddingBottom: 0 }}>
-        <Heading level="6" margin="none">
-          {issue.title}
-        </Heading>
-        <Text size="small">{digestDesc(issue.description ?? '')}</Text>
-      </CardBody>
-      <CardFooter
-        pad={{ horizontal: 'small', vertical: 'small' }}
-        background="rgba(255,255,255,0.2)"
-        align="center"
-      >
-        {/* <Text size="small">{formatTimestamp(issue.createdAt)}</Text> */}
-        <Tags tags={issue.tags ?? []} />
-        <Box direction="row" align="center" gap="small">
-          <ThumbsUp size={18} />
-          <Text size="small">{likes.length}</Text>
+      <Box direction="row" align="center">
+        <Box
+          gap="small"
+          style={{ borderLeft: `2px solid ${color}`, paddingLeft: 8 }}
+        >
+          <Heading level="4" margin="none">
+            {issue.title}
+          </Heading>
+          <Box direction="row" gap="small">
+            <CategoryLabel category={issue.category} />
+          </Box>
         </Box>
-      </CardFooter>
-    </Card>
+      </Box>
+      <Box direction="column" align="center">
+        <ChevronUp size={18} />
+        <Text size="small">{likes.length}</Text>
+      </Box>
+    </Box>
   )
 }
 
-export default FeedbackCard
+export default IssueCard

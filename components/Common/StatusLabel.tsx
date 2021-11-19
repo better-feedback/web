@@ -7,7 +7,7 @@ export default function StatusLabel({ status }: { status: Status }) {
   return (
     <Box direction="row">
       <Box background={color} pad={{ vertical: '4px', horizontal: '10px' }}>
-        <Text>{text}</Text>
+        <Text size="small">{text}</Text>
       </Box>
     </Box>
   )

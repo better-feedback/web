@@ -1,11 +1,33 @@
 import PubSub from 'pubsub-js'
-import { BetterDAO, IssueCategory, Status, ToastType } from '../type'
 import {
-  acceptFeedback,
-  completeFeedback,
-  rejectFeedback,
-  startFeedback,
-} from './contract'
+  BetterDAO,
+  Issue,
+  IssueCategory,
+  IssueCreation,
+  Status,
+  ToastType,
+} from '../type'
+import { approveIssue, completeIssue, closeIssue, startIssue } from './contract'
+
+export const validateIssueForm = (issue: IssueCreation): boolean => {
+  if (!issue.title.trim()) {
+    toast(ToastType.ERROR, 'Invalid title')
+    return false
+  }
+  if (!issue.description.trim()) {
+    toast(ToastType.ERROR, 'Invalid description')
+    return false
+  }
+  if (issue.title.length > 100) {
+    toast(ToastType.ERROR, 'Title is too long')
+    return false
+  }
+  if (issue.description.length > 1000) {
+    toast(ToastType.ERROR, 'Description is too long')
+    return false
+  }
+  return true
+}
 
 export const validateDAOForm = (dao: BetterDAO): boolean => {
   if (!/^[a-z1-9_-]{1,13}$/.test(dao.name)) {
@@ -68,38 +90,38 @@ export const getStatusConfig = (status: Status) => {
   switch (status) {
     case Status.Open:
       return {
-        text: 'Under review',
+        text: 'Open',
         actionName: '',
         color: 'status-unknown',
         actions: [
           {
             icon: 'CheckCircle',
             nextStatus: Status.Planned,
-            call: acceptFeedback,
+            call: approveIssue,
           },
           {
             icon: 'XCircle',
             nextStatus: Status.Closed,
-            call: rejectFeedback,
+            call: closeIssue,
           },
         ],
       }
     case Status.Planned:
       return {
-        text: 'Accepted',
+        text: 'Planned',
         actionName: 'Accept',
         color: 'rgba(0, 140, 213, 0.5)',
         actions: [
           {
             icon: 'PlayCircle',
             nextStatus: Status.InProgress,
-            call: startFeedback,
+            call: startIssue,
           },
         ],
       }
     case Status.Closed:
       return {
-        text: 'Rejected',
+        text: 'Closed',
         actionName: 'Reject',
         color: 'dark-1',
         icons: [],
@@ -114,7 +136,7 @@ export const getStatusConfig = (status: Status) => {
           {
             icon: 'Archive',
             nextStatus: Status.Completed,
-            call: completeFeedback,
+            call: completeIssue,
           },
         ],
       }

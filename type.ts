@@ -24,6 +24,14 @@ export enum Status {
   Completed,
 }
 
+export const StatusList = [
+  'Open',
+  'Planned',
+  'Closed',
+  'InProgress',
+  'Completed',
+]
+
 export type BetterDAO = {
   name: string
   projectUrl: string
@@ -32,6 +40,12 @@ export type BetterDAO = {
   categories?: string[]
   createdAt?: string
   createdBy?: string
+}
+
+export type IssueCreation = {
+  title: string
+  description: string
+  category: string
 }
 
 export type Issue = {
@@ -45,6 +59,7 @@ export type Issue = {
   createdBy: string
   creator: string
   category: string
+  status: Status
 }
 
 export type Fund = {
@@ -71,4 +86,26 @@ export type IssueType = {
   hunter: string[]
   funds: Fund[]
   logs: Log[]
+}
+
+export enum DAOMethod {
+  getDAO = 'getDAO',
+  getIssues = 'getIssues',
+  getIssue = 'getIssue',
+  getLikes = 'getLikes',
+  getLogs = 'getLogs',
+  getDAOInfo = 'getDAOInfo',
+  getCouncil = 'getCouncil',
+  getCategories = 'getCategories',
+  getIssuesByStatus = 'getIssuesByStatus',
+  getIssuesByCategory = 'getIssuesByCategory',
+  getIssuesCountByStatus = 'getIssuesCountByStatus',
+  getIssuesCountByCategory = 'getIssuesCountByCategory',
+
+  createIssue = 'createIssue',
+  likeIssue = 'likeIssue',
+  approveIssue = 'approveIssue',
+  closeIssue = 'closeIssue',
+  startIssue = 'startIssue',
+  completeIssue = 'completeIssue',
 }

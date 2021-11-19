@@ -8,25 +8,29 @@ import {
   Select,
 } from 'grommet'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-import Layout from '../../../../components/Layout'
-import { DAOMethod, IssueCategory, ToastType } from '../../../../type'
-import { createIssue } from '../../../../utils/contract'
+import { useEffect, useMemo, useState } from 'react'
+import Layout from '../../../../../components/Layout'
+import { DAOMethod, IssueCategory, ToastType } from '../../../../../type'
+import { createIssue } from '../../../../../utils/contract'
 import _ from 'lodash'
-import { toast, validateIssueForm } from '../../../../utils/common'
-import { useDAOviewMethod } from '../../../../hooks/query'
+import { toast, validateIssueForm } from '../../../../../utils/common'
+import { useDAOviewMethod } from '../../../../../hooks/query'
 
-export default function NewIssue({}) {
+export default function EditIssue({}) {
   const router = useRouter()
-  const daoName = router.query.did as string
+  const daoAddress = router.query.did as string
+  const issueId = router.query.bid as string
   const [isLoading, setIsLoading] = useState(false)
 
+  const params = useMemo(() => ({ id: Number(issueId) }), [issueId])
   const categories = useDAOviewMethod(
-    daoName,
+    daoAddress,
     DAOMethod.getCategories,
     undefined,
     []
   )
+  const council = useDAOviewMethod(daoAddress, DAOMethod.getCouncil, params, [])
+  const _issue = useDAOviewMethod(daoAddress, DAOMethod.getIssue, params, null)
   const [issue, setIssue] = useState({
     title: '',
     description: '',
@@ -34,17 +38,17 @@ export default function NewIssue({}) {
   })
 
   useEffect(() => {
-    if (categories.length > 0 && !issue.category) {
-      setIssue({ ...issue, category: categories[0] })
+    if (_issue) {
+      setIssue(_issue)
     }
-  }, [categories, issue])
+  }, [categories, issue, _issue])
 
   const onCreateIssue = () => {
     if (!validateIssueForm(issue)) {
       return
     }
     setIsLoading(true)
-    createIssue(daoName, {
+    createIssue(daoAddress, {
       title: issue.title,
       description: issue.description,
       category: issue.category,
@@ -61,7 +65,7 @@ export default function NewIssue({}) {
   return (
     <Layout title="Create an issue" isLoading={isLoading}>
       <Box direction="column" align="center" gap="small">
-        <Heading level="2">Create an issue</Heading>
+        <Heading level="2">Edit an issue</Heading>
         <Form
           value={issue}
           onChange={(nextValue) => setIssue(nextValue)}

@@ -1,9 +1,10 @@
-import { Box, Heading } from 'grommet'
+import { Box, Heading, Text } from 'grommet'
+import { Smile } from 'react-feather'
 import { IssueType, Status } from '../../type'
 import { getStatusConfig, hexToRGB } from '../../utils/common'
-import FeedbackCard from '../Cards/Issue'
+import IssueCard from '../Cards/Issue'
 
-export default function FeedbackList({
+export default function IssueList({
   status,
   issues,
   daoAddress,
@@ -16,8 +17,6 @@ export default function FeedbackList({
   const list = issues.filter((issue) => issue.status === status)
   return (
     <Box
-      background={color}
-      pad={{ vertical: 'small' }}
       style={{
         minWidth: 'unset',
         maxWidth: 'unset',
@@ -25,22 +24,32 @@ export default function FeedbackList({
         borderRadius: 8,
       }}
     >
-      <Heading
-        level={5}
-        margin={{ horizontal: 'small', vertical: 'none', bottom: 'small' }}
+      <Box
+        background={color}
+        pad={{ vertical: 'xsmall' }}
+        style={{ borderTopLeftRadius: 6, borderTopRightRadius: 6 }}
       >
-        {text}
-      </Heading>
-      <Box gap="xxsmall" style={{ minHeight: 'unset' }}>
+        <Heading level={5} margin={{ horizontal: 'small', vertical: 'none' }}>
+          {text}
+        </Heading>
+      </Box>
+      <Box gap="xxsmall" background="white" style={{ minHeight: 'unset' }}>
         {list.map((issue: any) => {
           return (
-            <FeedbackCard
+            <IssueCard
               key={issue.id}
               issue={issue}
               daoAddress={daoAddress}
+              color={color}
             />
           )
         })}
+        {list.length === 0 && (
+          <Box pad="small" align="center" justify="center">
+            <Smile size={32} />
+            <Text>{"There's no issue"}</Text>
+          </Box>
+        )}
       </Box>
     </Box>
   )

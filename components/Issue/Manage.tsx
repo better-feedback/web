@@ -8,10 +8,12 @@ export default function Manage({
   status,
   daoAddress,
   feedbackId,
+  setIsLoading,
 }: {
   status: Status
   daoAddress: string
   feedbackId: number
+  setIsLoading: any
 }) {
   const { actions } = getStatusConfig(status)
   return (
@@ -26,11 +28,14 @@ export default function Manage({
             icon={<Icon size={16} />}
             background={color}
             onClick={() => {
+              setIsLoading(true)
               call(daoAddress, feedbackId)
                 .then(() => {
+                  setIsLoading(false)
                   window.location.reload()
                 })
                 .catch((error) => {
+                  setIsLoading(false)
                   toast(ToastType.ERROR, error.message)
                 })
             }}
