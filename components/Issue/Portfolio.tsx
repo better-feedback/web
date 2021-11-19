@@ -1,17 +1,17 @@
-import { Heading, Box, Button, Markdown, Text } from 'grommet'
+import { Box, Text } from 'grommet'
 import { DollarSign, ThumbsUp } from 'react-feather'
 import ButtonWrap from './ButtonWrap'
 import { useAccount } from '../../hooks/wallet'
 import { formatTimestamp } from '../../utils/format'
 import { likeIssue } from '../../utils/contract'
-import { useDAOviewMethod } from '../../hooks/query'
 import Manage from './Manage'
 import StatusLabel from '../Common/StatusLabel'
-import { toast } from '../../utils/common'
-import { ToastType } from '../../type'
-import { useMemo } from 'react'
-import LikedBy from './LikedBy'
+import { calcFund, toast } from '../../utils/common'
+import { Status, ToastType } from '../../type'
 import CategoryLabel from '../Common/CategoryLabel'
+import { useState } from 'react'
+import FundModal from './FundModal'
+import { utils } from 'near-api-js'
 
 const Row = ({ title, value }) => {
   return (
@@ -22,11 +22,15 @@ const Row = ({ title, value }) => {
   )
 }
 
-export default function Portfolio({ issue, daoAddress, setIsLoading }) {
+export default function Portfolio({
+  issue,
+  daoAddress,
+  setIsLoading,
+  isCouncil,
+}) {
   const account = useAccount()
-  const params = useMemo(() => ({ id: issue?.id }), [issue.id])
-  const likes = useDAOviewMethod(daoAddress, 'getLikes', params, [])
-  const council = useDAOviewMethod(daoAddress, 'getCouncil', undefined, [])
+  const [isFundModalVisible, setIsFundModalVisible] = useState(false)
+
   if (!issue) {
     return (
       <Box
@@ -51,8 +55,8 @@ export default function Portfolio({ issue, daoAddress, setIsLoading }) {
       })
   }
 
-  const isLiked = likes.includes(account?.accountId)
-  const isManager = council.includes(account?.accountId)
+  const isLiked = issue?.likes?.includes(account?.accountId)
+
   return (
     <Box
       direction="column"
@@ -71,14 +75,16 @@ export default function Portfolio({ issue, daoAddress, setIsLoading }) {
           title="Created at"
           value={issue ? formatTimestamp(issue.createdAt) : ''}
         />
-        <Row title="Liked by" value={<LikedBy likes={likes} />} />
         {issue.fundable && (
           <Row
-            title="Funders"
+            title="Bounty"
             value={
-              issue?.funds.length
-                ? issue.funds.length
-                : "There's not funder yet"
+              <Box direction="row" align="center" gap="xsmall">
+                <Text color="brand">
+                  {utils.format.formatNearAmount(calcFund(issue?.funds ?? []))}
+                </Text>
+                <Text size="xlarge">Ⓝ</Text>
+              </Box>
             }
           />
         )}
@@ -95,22 +101,32 @@ export default function Portfolio({ issue, daoAddress, setIsLoading }) {
           }}
           icon={<ThumbsUp size={20} />}
         />
-        {issue.fundable && (
+        {issue.fundable && issue.status !== Status.Completed && (
           <ButtonWrap
             title="Fund"
             background="status-ok"
-            onClick={() => {}}
+            onClick={() => {
+              setIsFundModalVisible(true)
+            }}
             icon={<DollarSign size={20} />}
           />
         )}
       </Box>
 
-      {isManager && (
+      {isCouncil && (
         <Manage
-          status={issue?.status}
+          issue={issue}
           daoAddress={daoAddress}
           feedbackId={issue?.id}
           setIsLoading={setIsLoading}
+        />
+      )}
+      {isFundModalVisible && (
+        <FundModal
+          setIsLoading={setIsLoading}
+          issue={issue}
+          onClose={() => setIsFundModalVisible(false)}
+          daoAddress={daoAddress}
         />
       )}
     </Box>

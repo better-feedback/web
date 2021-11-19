@@ -1,6 +1,8 @@
 import PubSub from 'pubsub-js'
+import BN from 'bn.js'
 import {
   BetterDAO,
+  Fund,
   Issue,
   IssueCategory,
   IssueCreation,
@@ -174,4 +176,12 @@ export function hexToRGB(hex) {
     .substring(1)
     .match(/.{2}/g)
     .map((x) => parseInt(x, 16))
+}
+
+export function calcFund(funds: Fund[]): string {
+  let total = new BN(0)
+  for (let index = 0; index < funds.length; index++) {
+    total.iadd(new BN(funds[index].amount))
+  }
+  return total.toString()
 }

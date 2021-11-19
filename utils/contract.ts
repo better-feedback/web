@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import { BetterDAO } from '../type'
+import { BetterDAO, ExperienceLevel } from '../type'
 import { getDAOContract, getFactoryContract } from './wallet'
 import _ from 'lodash'
 import router from 'next/router'
@@ -21,6 +21,22 @@ export const createDAO = async (dao: BetterDAO) => {
   router.push(`/dao/${dao.name}.${CONTRACT_NAME}`)
 }
 
+export const updateDAO = async (
+  daoAddress: string,
+  projectUrl: string,
+  logoUrl: string,
+  description: string,
+  categories: string[]
+) => {
+  const contract = (await getDAOContract(daoAddress)) as any
+  await contract.updateDAO({
+    projectUrl,
+    logoUrl,
+    description,
+    categories,
+  })
+}
+
 export const deleteDAO = async (daoAddress: string) => {
   const contract = (await getFactoryContract()) as any
   await contract.deleteDAO({ name: daoAddress })
@@ -31,27 +47,59 @@ export const createIssue = async (daoAddress: string, issue: any) => {
   await contract.createIssue(issue)
 }
 
-export const likeIssue = async (daoAddress: string, feedbackId: number) => {
+export const updateIssue = async (daoAddress: string, issue: any) => {
   const contract = (await getDAOContract(daoAddress)) as any
-  await contract.likeIssue({ id: feedbackId })
+  await contract.updateIssue(issue)
 }
 
-export const approveIssue = async (daoAddress: string, feedbackId: number) => {
+export const likeIssue = async (daoAddress: string, issueId: number) => {
   const contract = (await getDAOContract(daoAddress)) as any
-  await contract.approveIssue({ id: feedbackId })
+  await contract.likeIssue({ id: issueId })
 }
 
-export const closeIssue = async (daoAddress: string, feedbackId: number) => {
+export const approveIssue = async (daoAddress: string, issueId: number) => {
   const contract = (await getDAOContract(daoAddress)) as any
-  await contract.closeIssue({ id: feedbackId })
+  await contract.approveIssue({ id: issueId })
 }
 
-export const startIssue = async (daoAddress: string, feedbackId: number) => {
+export const closeIssue = async (daoAddress: string, issueId: number) => {
   const contract = (await getDAOContract(daoAddress)) as any
-  await contract.startIssue({ id: feedbackId })
+  await contract.closeIssue({ id: issueId })
 }
 
-export const completeIssue = async (daoAddress: string, feedbackId: number) => {
+export const startIssue = async (daoAddress: string, issueId: number) => {
   const contract = (await getDAOContract(daoAddress)) as any
-  await contract.completeIssue({ id: feedbackId })
+  await contract.startIssue({ id: issueId })
+}
+
+export const completeIssue = async (daoAddress: string, issueId: number) => {
+  const contract = (await getDAOContract(daoAddress)) as any
+  await contract.completeIssue({ id: issueId })
+}
+
+export const issueToBounty = async (
+  daoAddress: string,
+  issueId: number,
+  exLv: ExperienceLevel
+) => {
+  const contract = (await getDAOContract(daoAddress)) as any
+  await contract.issueToBounty({ id: issueId, exLv })
+}
+
+export const addComment = async (
+  daoAddress: string,
+  issueId: number,
+  comment: string
+) => {
+  const contract = (await getDAOContract(daoAddress)) as any
+  await contract.addComment({ id: issueId, comment })
+}
+
+export const fundIssue = async (
+  daoAddress: string,
+  issueId: number,
+  amount: string
+) => {
+  const contract = (await getDAOContract(daoAddress)) as any
+  await contract.fundIssue({ id: issueId, amount })
 }

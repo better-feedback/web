@@ -45,3 +45,7 @@ span {
 #tag {
   width: 100%;
 }
+
+p {
+  max-width: unset !important;
+}

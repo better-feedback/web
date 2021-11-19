@@ -1,13 +1,15 @@
-import { Heading, Box, Button, Markdown, Text, Anchor } from 'grommet'
+import { Box, Text, Anchor } from 'grommet'
 import { useRouter } from 'next/router'
 import Layout from '../../../../../components/Layout'
 import Portfolio from '../../../../../components/Issue/Portfolio'
 import { useDAOviewMethod } from '../../../../../hooks/query'
-import { getDAOName, getTagColor } from '../../../../../utils/common'
+import { getDAOName } from '../../../../../utils/common'
 import Logs from '../../../../../components/Logs'
 import { useMemo, useState } from 'react'
 import { useAccount } from '../../../../../hooks/wallet'
-import { ChevronRight, Edit } from 'react-feather'
+import { ChevronRight } from 'react-feather'
+import { DAOMethod } from '../../../../../type'
+import IssueDetail from '../../../../../components/Issue/Detail'
 
 const DAOPage = () => {
   const account = useAccount()
@@ -16,13 +18,24 @@ const DAOPage = () => {
   const issueId = query.bid as string
   const params = useMemo(() => ({ id: Number(issueId) }), [issueId])
 
-  const issue = useDAOviewMethod(daoAddress, 'getIssue', params, null)
-  const logs = useDAOviewMethod(daoAddress, 'getLogs', params, [])
+  const issue = useDAOviewMethod(
+    daoAddress,
+    DAOMethod.getIssueInfo,
+    params,
+    null
+  )
   const [isLoading, setIsLoading] = useState(false)
+  const council = useDAOviewMethod(
+    daoAddress,
+    DAOMethod.getCouncil,
+    undefined,
+    []
+  )
 
-  let isEditable = false
-  if (issue && issue.createdBy === account?.accountId) {
-    isEditable = true
+  let isCouncil = false
+
+  if (issue && council.includes(account?.accountId)) {
+    isCouncil = true
   }
 
   return (
@@ -49,39 +62,24 @@ const DAOPage = () => {
             issue={issue}
             daoAddress={daoAddress}
             setIsLoading={setIsLoading}
+            isCouncil={isCouncil}
           />
         )}
 
         <Box width="880px">
-          <Box flex="grow" background="white" pad="medium" gap="small">
-            <Heading level={2} margin="none">
-              {issue?.title}
-            </Heading>
+          <IssueDetail
+            daoAddress={daoAddress}
+            issueId={issueId}
+            issue={issue}
+            isCouncil={isCouncil}
+            setIsLoading={setIsLoading}
+          />
 
-            <Markdown>{issue?.description ?? ''}</Markdown>
-            <Box direction="row">
-              {(issue?.tags ?? []).map((tag) => (
-                <Box
-                  key={tag}
-                  background={getTagColor(tag)}
-                  pad={{ vertical: '4px', horizontal: '10px' }}
-                >
-                  <Text>{tag}</Text>
-                </Box>
-              ))}
-            </Box>
-
-            <Box direction="row" justify="end">
-              {isEditable && (
-                <Anchor
-                  icon={<Edit />}
-                  href={`/dao/${daoAddress}/issue/${issueId}/edit`}
-                />
-              )}
-            </Box>
-          </Box>
-
-          <Logs logs={logs} />
+          <Logs
+            logs={issue?.logs ?? []}
+            likes={issue?.likes ?? []}
+            issue={issue}
+          />
         </Box>
       </Box>
     </Layout>

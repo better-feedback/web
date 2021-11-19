@@ -45,7 +45,7 @@ export default function IssueList({
           )
         })}
         {list.length === 0 && (
-          <Box pad="small" align="center" justify="center">
+          <Box pad={{ vertical: 'medium' }} align="center" justify="center">
             <Smile size={32} />
             <Text>{"There's no issue"}</Text>
           </Box>

@@ -64,6 +64,7 @@ export const getDAOContract = async (daoName: string) => {
       'getDAO',
       'getIssues',
       'getIssue',
+      'getIssueInfo',
       'getLikes',
       'getLogs',
       'getDAOInfo',
@@ -81,6 +82,11 @@ export const getDAOContract = async (daoName: string) => {
       'closeIssue',
       'startIssue',
       'completeIssue',
+      'updateIssue',
+      'addComment',
+      'issueToBounty',
+      'updateDAO',
+      'fundIssue',
     ],
   })
 

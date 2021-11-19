@@ -1,21 +1,25 @@
 import { Box } from 'grommet'
+import { useState } from 'react'
 import * as Icons from 'react-feather'
-import { Status, ToastType } from '../../type'
+import { Issue, Status, ToastType } from '../../type'
 import { getStatusConfig, toast } from '../../utils/common'
+import BountyModal from './BountyModal'
 import ButtonWrap from './ButtonWrap'
 
 export default function Manage({
-  status,
+  issue,
   daoAddress,
   feedbackId,
   setIsLoading,
 }: {
-  status: Status
+  issue: Issue
   daoAddress: string
   feedbackId: number
   setIsLoading: any
 }) {
-  const { actions } = getStatusConfig(status)
+  const [isBountyModalVisible, setIsBountyModalVisible] = useState(false)
+  const { actions } = getStatusConfig(issue?.status)
+
   return (
     <Box>
       {actions.map(({ icon, nextStatus, call }) => {
@@ -42,6 +46,24 @@ export default function Manage({
           />
         )
       })}
+      {issue?.status === Status.Planned && !issue.fundable && (
+        <ButtonWrap
+          title="Bounty"
+          icon={<Icons.DollarSign size={16} />}
+          background="status-error"
+          onClick={() => {
+            setIsBountyModalVisible(true)
+          }}
+        />
+      )}
+      {isBountyModalVisible && (
+        <BountyModal
+          onClose={() => setIsBountyModalVisible(false)}
+          daoAddress={daoAddress}
+          issue={issue}
+          setIsLoading={setIsLoading}
+        />
+      )}
     </Box>
   )
 }

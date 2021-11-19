@@ -24,10 +24,8 @@ const Identifier = ({ children, title, subTitle, size, ...rest }) => (
 )
 
 function DAOCard({ name }: { name: string }) {
-  const dao = useDao(name)
   const account = useAccount()
-  // const info = useDAOviewMethod(name, 'getDAOInfo')
-  // console.log('info', info)
+  const dao = useDAOviewMethod(name, 'getDAOInfo', undefined, null)
 
   return (
     <Card

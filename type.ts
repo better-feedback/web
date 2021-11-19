@@ -8,12 +8,28 @@ export type Toaster = {
   message: string
 }
 
+export enum ExperienceLevel {
+  Beginner,
+  Intermediate,
+  Advanced,
+}
+
+export const ExLvList = ['Beginner', 'Intermediate', 'Advanced']
+
 export enum IssueCategory {
   BUG = 'Bug',
   FEATURE_REQUEST = 'Feature Request',
   UI = 'UI',
   OTHER = 'Other',
   SMART_CONTRACT = 'Smart Contract',
+}
+
+export enum LogType {
+  Status,
+  Comment,
+  Fund,
+  Apply,
+  Edit,
 }
 
 export enum Status {
@@ -53,17 +69,18 @@ export type Issue = {
   title: string
   description: string
   likes: string[]
-  funders: any[]
+  funds: any[]
   tags: string[]
   createdAt: string
   createdBy: string
   creator: string
   category: string
   status: Status
+  fundable: boolean
 }
 
 export type Fund = {
-  amount: number
+  amount: string
   funder: string
 }
 
@@ -72,6 +89,7 @@ export type Log = {
   message: string
   status: Status
   sender: string
+  logType: LogType
 }
 
 export type IssueType = {
@@ -92,6 +110,7 @@ export enum DAOMethod {
   getDAO = 'getDAO',
   getIssues = 'getIssues',
   getIssue = 'getIssue',
+  getIssueInfo = 'getIssueInfo',
   getLikes = 'getLikes',
   getLogs = 'getLogs',
   getDAOInfo = 'getDAOInfo',

@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { Box, Card, CardBody, CardFooter, Heading, Text } from 'grommet'
 import { ChevronsUp, ChevronUp, ThumbsUp } from 'react-feather'
-import { Issue } from '../../type'
+import { DAOMethod, Issue } from '../../type'
 import router from 'next/router'
 import { useDAOviewMethod } from '../../hooks/query'
 import CategoryLabel from '../Common/CategoryLabel'
@@ -20,7 +20,13 @@ function IssueCard({
   color: string
 }) {
   const params = useMemo(() => ({ id: issue?.id }), [issue.id])
-  const likes = useDAOviewMethod(daoAddress, 'getLikes', params, [])
+  const _issue = useDAOviewMethod(
+    daoAddress,
+    DAOMethod.getIssueInfo,
+    params,
+    null
+  )
+
   return (
     <Box
       direction="row"
@@ -42,12 +48,15 @@ function IssueCard({
           </Heading>
           <Box direction="row" gap="small">
             <CategoryLabel category={issue.category} />
+            {issue.fundable && (
+              <CategoryLabel category="Bounty" background="status-error" />
+            )}
           </Box>
         </Box>
       </Box>
       <Box direction="column" align="center">
         <ChevronUp size={18} />
-        <Text size="small">{likes.length}</Text>
+        <Text size="small">{(_issue?.likes || []).length}</Text>
       </Box>
     </Box>
   )

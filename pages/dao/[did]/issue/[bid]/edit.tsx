@@ -11,7 +11,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import Layout from '../../../../../components/Layout'
 import { DAOMethod, IssueCategory, ToastType } from '../../../../../type'
-import { createIssue } from '../../../../../utils/contract'
+import { createIssue, updateIssue } from '../../../../../utils/contract'
 import _ from 'lodash'
 import { toast, validateIssueForm } from '../../../../../utils/common'
 import { useDAOviewMethod } from '../../../../../hooks/query'
@@ -41,14 +41,15 @@ export default function EditIssue({}) {
     if (_issue) {
       setIssue(_issue)
     }
-  }, [categories, issue, _issue])
+  }, [_issue])
 
-  const onCreateIssue = () => {
+  const onUpdateIssue = () => {
     if (!validateIssueForm(issue)) {
       return
     }
     setIsLoading(true)
-    createIssue(daoAddress, {
+    updateIssue(daoAddress, {
+      id: _issue.id,
       title: issue.title,
       description: issue.description,
       category: issue.category,
@@ -65,7 +66,7 @@ export default function EditIssue({}) {
   return (
     <Layout title="Create an issue" isLoading={isLoading}>
       <Box direction="column" align="center" gap="small">
-        <Heading level="2">Edit an issue</Heading>
+        <Heading level="2">Edit the issue</Heading>
         <Form
           value={issue}
           onChange={(nextValue) => setIssue(nextValue)}
@@ -90,15 +91,7 @@ export default function EditIssue({}) {
             id="category"
             name="category"
             style={{ width: 450 }}
-            options={
-              categories || [
-                IssueCategory.BUG,
-                IssueCategory.FEATURE_REQUEST,
-                IssueCategory.SMART_CONTRACT,
-                IssueCategory.UI,
-                IssueCategory.OTHER,
-              ]
-            }
+            options={categories}
           />
 
           <Box
@@ -113,7 +106,7 @@ export default function EditIssue({}) {
               primary
               label="Submit"
               color="#333"
-              onClick={onCreateIssue}
+              onClick={onUpdateIssue}
             />
           </Box>
         </Form>
