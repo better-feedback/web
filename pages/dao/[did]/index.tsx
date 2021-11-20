@@ -1,58 +1,78 @@
-import { Heading, Box, Button, Image, Text } from 'grommet'
-import router, { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-import BountyCard from '../../../components/Cards/Bounty'
-import Layout from '../../../components/Layout'
-import { BetterDAO } from '../../../type'
-import { getDAOContract, getFactoryContract } from '../../../utils/wallet'
+import { Box } from 'grommet'
+import { useRouter } from 'next/router'
+import IssueList from 'components/Issue/List'
+import CategoryCount from 'components/Common/CategoryCount'
+import StatusCount from 'components/Common/StatusCount'
+import Layout from 'components/Layout'
+import { useDAOviewMethod } from 'hooks/query'
+import { DAOMethod, Status } from 'type'
+import DAOIntro from 'components/DAO/Intro'
 
 const DAOPage = () => {
   const { query } = useRouter()
-  const [dao, setDao] = useState<BetterDAO>()
-  const [bounties, setBounties] = useState([])
-  const daoName = query.did as string
-  useEffect(() => {
-    if (!daoName) {
-      return
-    }
-    getDAOContract(daoName).then((contract: any) => {
-      contract.getAllBounties().then((bounties: any) => {
-        setBounties(bounties)
-      })
-    })
-    getFactoryContract().then((contract: any) => {
-      contract.getDAO({ name: daoName }).then((dao: any) => {
-        setDao(dao)
-      })
-    })
-  }, [daoName])
+  const daoAddress = query.did as string
+  const issues = useDAOviewMethod(
+    daoAddress,
+    DAOMethod.getIssues,
+    undefined,
+    []
+  )
+  const categories = useDAOviewMethod(
+    daoAddress,
+    DAOMethod.getCategories,
+    undefined,
+    []
+  )
 
   return (
-    <Layout title={daoName}>
-      <Box direction="column" pad={{ vertical: 'medium' }}>
-        <Box direction="row" align="center" justify="between" width="100%">
-          <Box direction="row" align="center">
-            {dao && dao.logoUrl && (
-              <Image src={dao.logoUrl} alt={daoName} height={80} />
-            )}
-            <Heading margin="none">{daoName}</Heading>
-          </Box>
+    <Layout title={daoAddress}>
+      <Box direction="column" align="center" justify="center">
+        <DAOIntro daoAddress={daoAddress} />
 
-          <Button
-            label="Create a bounty"
-            primary
-            onClick={() => {
-              router.push(`/dao/${daoName}/bounty/new`)
-            }}
+        <Box direction="row" wrap align="center" justify="center" width="90%">
+          {categories.map((category, index) => {
+            return (
+              <CategoryCount
+                key={index}
+                category={category}
+                daoAddress={daoAddress}
+              />
+            )
+          })}
+          {[Status.Open, Status.Closed].map((status, index) => {
+            return (
+              <StatusCount
+                key={index}
+                status={status}
+                daoAddress={daoAddress}
+              />
+            )
+          })}
+        </Box>
+
+        <Box
+          width="1200px"
+          direction="row"
+          overflow="scroll"
+          pad="medium"
+          gap="medium"
+        >
+          <IssueList
+            status={Status.Planned}
+            issues={issues}
+            daoAddress={daoAddress}
+          />
+          <IssueList
+            status={Status.InProgress}
+            issues={issues}
+            daoAddress={daoAddress}
+          />
+          <IssueList
+            status={Status.Completed}
+            issues={issues}
+            daoAddress={daoAddress}
           />
         </Box>
-        <Text>{dao?.description && `Intro: ${dao?.description}`}</Text>
-      </Box>
-
-      <Box direction="column">
-        {bounties.map((bounty: any) => {
-          return <BountyCard dao={dao} bounty={bounty} key={bounty.id} />
-        })}
       </Box>
     </Layout>
   )

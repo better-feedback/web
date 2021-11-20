@@ -1,8 +1,18 @@
-import { connect, keyStores, WalletConnection, Contract } from 'near-api-js'
+import {
+  connect,
+  keyStores,
+  WalletConnection,
+  Contract,
+  providers,
+  Account,
+  Connection,
+} from 'near-api-js'
 import { getConfig, CONTRACT_NAME } from './config'
 
+const nearConfig = getConfig('testnet')
+// const provider = new providers.JsonRpcProvider(nearConfig.nodeUrl)
+
 const getNearWallet = async () => {
-  const nearConfig = getConfig('testnet')
   const near = await connect({
     ...nearConfig,
     keyStore: new keyStores.BrowserLocalStorageKeyStore(),
@@ -11,6 +21,11 @@ const getNearWallet = async () => {
   const wallet = new WalletConnection(near, '')
   return { wallet, near }
 }
+
+// const getConnection = () => {
+//   const connection = new Connection(nearConfig.nodeUrl, provider, {})
+//   return connection
+// }
 
 export const getAccount = async () => {
   const { wallet } = await getNearWallet()
@@ -34,8 +49,8 @@ export const getFactoryContract = async () => {
   const { wallet } = await getNearWallet()
   const account = wallet.account()
   const contract = new Contract(account, CONTRACT_NAME, {
-    viewMethods: ['getDAOs', 'getDAO'],
-    changeMethods: ['createDAO'],
+    viewMethods: ['getDaoList'],
+    changeMethods: ['create', 'deleteDAO'],
   })
 
   return contract
@@ -44,10 +59,45 @@ export const getFactoryContract = async () => {
 export const getDAOContract = async (daoName: string) => {
   const { wallet } = await getNearWallet()
   const account = wallet.account()
-  const contract = new Contract(account, `${daoName}.chezhe.testnet`, {
-    viewMethods: ['getBounty', 'getAllBounties'],
-    changeMethods: ['like', 'createBounty'],
+  const contract = new Contract(account, daoName, {
+    viewMethods: [
+      'getDAO',
+      'getIssues',
+      'getIssue',
+      'getIssueInfo',
+      'getLikes',
+      'getLogs',
+      'getDAOInfo',
+      'getCouncil',
+      'getCategories',
+      'getIssuesByStatus',
+      'getIssuesByCategory',
+      'getIssuesCountByStatus',
+      'getIssuesCountByCategory',
+    ],
+    changeMethods: [
+      'createIssue',
+      'likeIssue',
+      'approveIssue',
+      'closeIssue',
+      'startIssue',
+      'completeIssue',
+      'updateIssue',
+      'addComment',
+      'issueToBounty',
+      'updateDAO',
+      'fundIssue',
+      'applyIssue',
+      'approveApplicant',
+      'claimBounty',
+      'revokeApplicant',
+    ],
   })
 
   return contract
 }
+
+// export const getDAOState = async (daoName: string) => {
+//   const state = await new Account(getConnection(), daoName).state()
+//   return state
+// }
