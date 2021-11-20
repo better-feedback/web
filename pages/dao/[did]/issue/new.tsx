@@ -6,6 +6,7 @@ import {
   Button,
   TextArea,
   Select,
+  Text,
 } from 'grommet'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -15,11 +16,16 @@ import { createIssue } from 'utils/contract'
 import _ from 'lodash'
 import { toast, validateIssueForm } from 'utils/common'
 import { useDAOviewMethod } from 'hooks/query'
+import MarkdownIt from 'markdown-it'
+import MdEditor from 'react-markdown-editor-lite'
+
+const mdParser = new MarkdownIt()
 
 export default function NewIssue({}) {
   const router = useRouter()
   const daoAddress = router.query.did as string
   const [isLoading, setIsLoading] = useState(false)
+  const [content, setContent] = useState('')
 
   const categories = useDAOviewMethod(
     daoAddress,
@@ -47,13 +53,13 @@ export default function NewIssue({}) {
   }, [query])
 
   const onCreateIssue = () => {
-    if (!validateIssueForm(issue)) {
+    if (!validateIssueForm({ ...issue, description: content })) {
       return
     }
     setIsLoading(true)
     createIssue(daoAddress, {
       title: issue.title,
-      description: issue.description,
+      description: content,
       category: issue.category,
     })
       .then(() => {
@@ -73,26 +79,27 @@ export default function NewIssue({}) {
           value={issue}
           onChange={(nextValue) => setIssue(nextValue)}
           onSubmit={({ value }) => {}}
-          style={{ width: 500 }}
+          style={{ width: 800 }}
         >
           <TextInput
             placeholder="Bounty title"
             id="title"
             name="title"
-            style={{ marginBottom: 20 }}
+            style={{ marginBottom: 20, background: 'white' }}
             maxLength={100}
           />
-          <TextArea
-            placeholder="Description"
-            id="description"
-            name="description"
-            style={{ marginBottom: 20, height: 160 }}
-            maxLength={2000}
+          <MdEditor
+            style={{ height: '500px', marginBottom: 20 }}
+            renderHTML={(text) => mdParser.render(text)}
+            onChange={({ text }) => {
+              setContent(text)
+            }}
+            view={{ menu: false, md: true, html: true }}
           />
           <Select
             id="category"
             name="category"
-            style={{ width: 450 }}
+            style={{ width: 750 }}
             options={
               categories || [
                 IssueCategory.BUG,
