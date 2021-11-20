@@ -18,11 +18,11 @@ import { useDAOviewMethod } from 'hooks/query'
 
 export default function NewIssue({}) {
   const router = useRouter()
-  const daoName = router.query.did as string
+  const daoAddress = router.query.did as string
   const [isLoading, setIsLoading] = useState(false)
 
   const categories = useDAOviewMethod(
-    daoName,
+    daoAddress,
     DAOMethod.getCategories,
     undefined,
     []
@@ -39,17 +39,24 @@ export default function NewIssue({}) {
     }
   }, [categories, issue])
 
+  const query = router.query
+  useEffect(() => {
+    if (query.transactionHashes) {
+      router.replace(`/dao/${daoAddress}`)
+    }
+  }, [query])
+
   const onCreateIssue = () => {
     if (!validateIssueForm(issue)) {
       return
     }
     setIsLoading(true)
-    createIssue(daoName, {
+    createIssue(daoAddress, {
       title: issue.title,
       description: issue.description,
       category: issue.category,
     })
-      .then((tx) => {
+      .then(() => {
         router.back()
         setIsLoading(false)
       })

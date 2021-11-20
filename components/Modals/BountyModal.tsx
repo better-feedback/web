@@ -36,6 +36,9 @@ export default function BountyModal({
       .then(() => {
         setIsLoading(false)
         onClose()
+        setTimeout(() => {
+          window.location.reload()
+        }, 1000)
       })
       .catch((error) => {
         toast(ToastType.ERROR, error.message)

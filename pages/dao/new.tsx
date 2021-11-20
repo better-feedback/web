@@ -72,6 +72,7 @@ export default function DAONew({}) {
             id="logoUrl"
             name="logoUrl"
             type="url"
+            placeholder="URL must be end with svg/png/jpeg/jpg"
             style={{ marginBottom: 10, marginTop: 5 }}
           />
 

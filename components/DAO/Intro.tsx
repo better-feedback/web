@@ -47,6 +47,7 @@ export default function DAOIntro({ daoAddress }) {
                 icon={<Link size={16} />}
                 size="small"
                 target="_blank"
+                style={{ whiteSpace: 'nowrap' }}
               />
             )}
             <Text size="small">{dao?.description}</Text>

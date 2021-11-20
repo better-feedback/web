@@ -103,9 +103,7 @@ export default function Portfolio({
 
   let hunter = null
   if (issue.fundable) {
-    hunter = issue?.applicants.find(
-      (t) => t.applicant === account?.accountId && t.approved
-    )
+    hunter = issue?.applicants.find((t) => t.approved)
   }
 
   return (
@@ -146,9 +144,6 @@ export default function Portfolio({
           />
         )}
         {hunter && <Row title="Hunter" value={hunter.applicant} />}
-        {hunter && (
-          <Row title="Claimed?" value={hunter.claimed ? 'YES' : 'NO'} />
-        )}
       </Box>
 
       <Box direction="row" justify="between">

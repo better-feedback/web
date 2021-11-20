@@ -2,7 +2,7 @@ import { Box, Text, Anchor, Button } from 'grommet'
 import { useRouter } from 'next/router'
 import { User, UserCheck } from 'react-feather'
 import { Applicant, ToastType } from 'type'
-import { approveApplicant } from 'utils/contract'
+import { approveApplicant, revokeApplicant } from 'utils/contract'
 import { formatTimestamp } from 'utils/format'
 import { toast } from 'utils/common'
 
@@ -24,6 +24,21 @@ export default function Applicants({
   const onApprove = async (applicant: Applicant) => {
     setIsLoading(true)
     approveApplicant(daoAddress, Number(issueId), applicant.applicant)
+      .then(() => {
+        setTimeout(() => {
+          window.location.reload()
+        }, 1000)
+        setIsLoading(false)
+      })
+      .catch((error) => {
+        toast(ToastType.ERROR, error.message)
+        setIsLoading(false)
+      })
+  }
+
+  const onRevoke = async (applicant: Applicant) => {
+    setIsLoading(true)
+    revokeApplicant(daoAddress, Number(issueId), applicant.applicant)
       .then(() => {
         setTimeout(() => {
           window.location.reload()
@@ -61,7 +76,7 @@ export default function Applicants({
                     background="status-ok"
                     gap="xsmall"
                     round
-                    pad="xsmall"
+                    pad={{ vertical: 'xsmall', horizontal: 'small' }}
                   >
                     <UserCheck color="white" />
                     <Text size="small" color="white">
@@ -69,7 +84,12 @@ export default function Applicants({
                     </Text>
                   </Box>
                 ) : (
-                  <Box direction="row" align="center" background="accent-1">
+                  <Box
+                    direction="row"
+                    align="center"
+                    background="accent-1"
+                    pad={{ vertical: 'xsmall', horizontal: 'small' }}
+                  >
                     <User color="white" />
                     <Text size="small" color="white">
                       Pending
@@ -88,7 +108,11 @@ export default function Applicants({
                   />
                 )}
                 {applicant.approved && isCouncil && (
-                  <Button label="Cancel" primary />
+                  <Button
+                    label="Revoke"
+                    primary
+                    onClick={() => onRevoke(applicant)}
+                  />
                 )}
               </Box>
             </Box>
