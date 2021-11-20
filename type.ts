@@ -64,6 +64,14 @@ export type IssueCreation = {
   category: string
 }
 
+export type Applicant = {
+  timestamp: number
+  approved: boolean
+  message: string
+  applicant: string
+  bountyGoal: string
+}
+
 export type Issue = {
   id: number
   title: string
@@ -77,6 +85,8 @@ export type Issue = {
   category: string
   status: Status
   fundable: boolean
+  experienceLevel: ExperienceLevel
+  applicants: any[]
 }
 
 export type Fund = {
@@ -127,4 +137,5 @@ export enum DAOMethod {
   closeIssue = 'closeIssue',
   startIssue = 'startIssue',
   completeIssue = 'completeIssue',
+  approveApplicant = 'approveApplicant',
 }

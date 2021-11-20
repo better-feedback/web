@@ -1,5 +1,4 @@
 import { Box, Text } from 'grommet'
-import { Status } from '../../type'
 
 export default function CategoryLabel({
   category,

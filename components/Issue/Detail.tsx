@@ -1,8 +1,9 @@
 import { Box, Markdown, Heading, Anchor } from 'grommet'
 import { Edit, MessageSquare } from 'react-feather'
 import { useState } from 'react'
-import { Issue } from '../../type'
-import CommentModal from './CommentModal'
+import { Issue } from 'type'
+import CommentModal from 'components/Modals/CommentModal'
+import CategoryLabel from 'components/Common/CategoryLabel'
 
 export default function IssueDetail({
   issue,
@@ -21,6 +22,9 @@ export default function IssueDetail({
 
   return (
     <Box flex="grow" background="white" pad="medium" gap="small">
+      {issue?.fundable && (
+        <CategoryLabel category="Bounty" background="status-error" />
+      )}
       <Heading level={2} margin="none">
         {issue?.title}
       </Heading>

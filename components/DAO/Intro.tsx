@@ -1,10 +1,10 @@
 import { Box, Heading, Image, Button, Text, Anchor } from 'grommet'
-import { getDAOName } from '../../utils/common'
+import { getDAOName } from 'utils/common'
 import { Edit, Link, Plus } from 'react-feather'
 import router from 'next/router'
-import { useDAOviewMethod } from '../../hooks/query'
-import { DAOMethod } from '../../type'
-import { useAccount } from '../../hooks/wallet'
+import { useDAOviewMethod } from 'hooks/query'
+import { DAOMethod } from 'type'
+import { useAccount } from 'hooks/wallet'
 
 export default function DAOIntro({ daoAddress }) {
   const account = useAccount()

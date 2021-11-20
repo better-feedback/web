@@ -2,15 +2,14 @@ import { Anchor, Box, Text } from 'grommet'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { ChevronRight, Meh } from 'react-feather'
-import IssueFilter from '../../../components/Common/IssueFilter'
-import IssueItem from '../../../components/Issue/Item'
-import Layout from '../../../components/Layout'
-import { useDAOviewMethod } from '../../../hooks/query'
-import { DAOMethod, Issue, StatusList } from '../../../type'
-import { getDAOName } from '../../../utils/common'
+import IssueFilter from 'components/Common/IssueFilter'
+import IssueItem from 'components/Issue/Item'
+import Layout from 'components/Layout'
+import { useDAOviewMethod } from 'hooks/query'
+import { DAOMethod, Issue, StatusList } from 'type'
+import { getDAOName } from 'utils/common'
 
 function filterIssues(issues: Issue[], status: number, category: string) {
-  console.log('###filterIssues', status, category)
   let _issues = issues
   if (status !== -1 && status !== undefined) {
     _issues = _issues.filter((issue) => issue.status === status)
@@ -80,7 +79,7 @@ export default function IssuesPage() {
           />
         </Box>
 
-        <Box pad="medium" flex="grow" gap="small">
+        <Box pad="medium" flex="grow" gap="small" background="white">
           {_filteredIssues.map((issue) => {
             return (
               <IssueItem key={issue.id} issue={issue} daoAddress={daoAddress} />

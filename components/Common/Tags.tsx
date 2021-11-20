@@ -1,6 +1,6 @@
 import { Box, Text } from 'grommet'
-import { IssueCategory } from '../../type'
-import { getTagColor } from '../../utils/common'
+import { IssueCategory } from 'type'
+import { getTagColor } from 'utils/common'
 
 export default function Tags({ tags }: { tags: string[] }) {
   return (

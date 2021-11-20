@@ -1,7 +1,7 @@
 import { Box, Text } from 'grommet'
 import router from 'next/router'
-import { useDAOviewMethod } from '../../hooks/query'
-import { DAOMethod, Status, StatusList } from '../../type'
+import { useDAOviewMethod } from 'hooks/query'
+import { DAOMethod, Status, StatusList } from 'type'
 
 export default function StatusCount({
   status,

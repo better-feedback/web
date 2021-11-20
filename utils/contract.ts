@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import { BetterDAO, ExperienceLevel } from '../type'
+import { BetterDAO, ExperienceLevel } from 'type'
 import { getDAOContract, getFactoryContract } from './wallet'
 import _ from 'lodash'
 import router from 'next/router'
@@ -80,10 +80,11 @@ export const completeIssue = async (daoAddress: string, issueId: number) => {
 export const issueToBounty = async (
   daoAddress: string,
   issueId: number,
-  exLv: ExperienceLevel
+  exLv: ExperienceLevel,
+  amount: string
 ) => {
   const contract = (await getDAOContract(daoAddress)) as any
-  await contract.issueToBounty({ id: issueId, exLv })
+  await contract.issueToBounty({ id: issueId, exLv, amount })
 }
 
 export const addComment = async (
@@ -102,4 +103,22 @@ export const fundIssue = async (
 ) => {
   const contract = (await getDAOContract(daoAddress)) as any
   await contract.fundIssue({ id: issueId, amount })
+}
+
+export const applyIssue = async (
+  daoAddress: string,
+  issueId: number,
+  message: string
+) => {
+  const contract = (await getDAOContract(daoAddress)) as any
+  await contract.applyIssue({ id: issueId, message })
+}
+
+export const approveApplicant = async (
+  daoAddress: string,
+  issueId: number,
+  applicantId: string
+) => {
+  const contract = (await getDAOContract(daoAddress)) as any
+  await contract.approveApplicant({ id: issueId, applicantId })
 }

@@ -10,12 +10,12 @@ import {
 } from 'grommet'
 import router, { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import TagsInput from '../../../components/Common/TagsInput'
-import Layout from '../../../components/Layout'
-import { useDAOviewMethod } from '../../../hooks/query'
-import { BetterDAO, DAOMethod, ToastType } from '../../../type'
-import { getDAOName, toast, validateDAOForm } from '../../../utils/common'
-import { createDAO, updateDAO, updateIssue } from '../../../utils/contract'
+import TagsInput from 'components/Common/TagsInput'
+import Layout from 'components/Layout'
+import { useDAOviewMethod } from 'hooks/query'
+import { BetterDAO, DAOMethod, ToastType } from 'type'
+import { getDAOName, toast, validateDAOForm } from 'utils/common'
+import { updateDAO } from 'utils/contract'
 
 export default function EditDAO({}) {
   const { query } = useRouter()

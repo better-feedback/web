@@ -15,12 +15,12 @@ import {
   Image,
   Main,
 } from 'grommet'
-import { useAccount } from '../../hooks/wallet'
-import { connectWallet } from '../../utils/wallet'
+import { useAccount } from 'hooks/wallet'
+import { connectWallet } from 'utils/wallet'
 import { useRouter } from 'next/router'
 import { Plus } from 'react-feather'
-import LoadingMask from '../Common/LoadingMask'
-import ToasterContainer from '../Common/ToasterContainer'
+import LoadingMask from 'components/Common/LoadingMask'
+import ToasterContainer from 'components/Common/ToasterContainer'
 
 interface Props {
   title: string

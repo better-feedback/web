@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react'
 import { Box, Card, CardBody, CardFooter, Heading, Text } from 'grommet'
 import { ChevronsUp, ChevronUp, ThumbsUp } from 'react-feather'
-import { DAOMethod, Issue } from '../../type'
+import { DAOMethod, Issue } from 'type'
 import router from 'next/router'
-import { useDAOviewMethod } from '../../hooks/query'
-import CategoryLabel from '../Common/CategoryLabel'
+import { useDAOviewMethod } from 'hooks/query'
+import CategoryLabel from 'components/Common/CategoryLabel'
 
 function digestDesc(desc: string) {
   return desc.length > 100 ? desc.substr(0, 100) + '...' : desc

@@ -1,6 +1,6 @@
-import { Box, Text, RadioButtonGroup, CheckBoxGroup, Anchor } from 'grommet'
-import { useDAOviewMethod } from '../../hooks/query'
-import { StatusList } from '../../type'
+import { Box, Text, RadioButtonGroup, Anchor } from 'grommet'
+import { useDAOviewMethod } from 'hooks/query'
+import { StatusList } from 'type'
 
 export default function IssueFilter({
   daoAddress,
@@ -48,7 +48,7 @@ export default function IssueFilter({
             label="Clear"
             size="small"
             onClick={() => {
-              setCategory(undefined)
+              setCategory('')
             }}
           />
         </Box>

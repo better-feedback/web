@@ -1,15 +1,15 @@
 import { Box, Text, Anchor } from 'grommet'
 import { useRouter } from 'next/router'
-import Layout from '../../../../../components/Layout'
-import Portfolio from '../../../../../components/Issue/Portfolio'
-import { useDAOviewMethod } from '../../../../../hooks/query'
-import { getDAOName } from '../../../../../utils/common'
-import Logs from '../../../../../components/Logs'
+import Layout from 'components/Layout'
+import Portfolio from 'components/Issue/Portfolio'
+import { useDAOviewMethod } from 'hooks/query'
+import { getDAOName } from 'utils/common'
+import Logs from 'components/Logs'
 import { useMemo, useState } from 'react'
-import { useAccount } from '../../../../../hooks/wallet'
+import { useAccount } from 'hooks/wallet'
 import { ChevronRight } from 'react-feather'
-import { DAOMethod } from '../../../../../type'
-import IssueDetail from '../../../../../components/Issue/Detail'
+import { DAOMethod } from 'type'
+import IssueDetail from 'components/Issue/Detail'
 
 const DAOPage = () => {
   const account = useAccount()
@@ -79,6 +79,8 @@ const DAOPage = () => {
             logs={issue?.logs ?? []}
             likes={issue?.likes ?? []}
             issue={issue}
+            isCouncil={isCouncil}
+            setIsLoading={setIsLoading}
           />
         </Box>
       </Box>

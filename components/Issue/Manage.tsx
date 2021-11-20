@@ -1,9 +1,9 @@
 import { Box } from 'grommet'
 import { useState } from 'react'
 import * as Icons from 'react-feather'
-import { Issue, Status, ToastType } from '../../type'
-import { getStatusConfig, toast } from '../../utils/common'
-import BountyModal from './BountyModal'
+import { Issue, Status, ToastType } from 'type'
+import { getStatusConfig, toast } from 'utils/common'
+import BountyModal from 'components/Modals/BountyModal'
 import ButtonWrap from './ButtonWrap'
 
 export default function Manage({
@@ -18,7 +18,7 @@ export default function Manage({
   setIsLoading: any
 }) {
   const [isBountyModalVisible, setIsBountyModalVisible] = useState(false)
-  const { actions } = getStatusConfig(issue?.status)
+  const { actions } = getStatusConfig(issue?.status, issue?.fundable)
 
   return (
     <Box>

@@ -87,6 +87,8 @@ export const getDAOContract = async (daoName: string) => {
       'issueToBounty',
       'updateDAO',
       'fundIssue',
+      'applyIssue',
+      'approveApplicant',
     ],
   })
 

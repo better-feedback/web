@@ -1,6 +1,6 @@
 import { Box, Text } from 'grommet'
-import { Status } from '../../type'
-import { getStatusConfig } from '../../utils/common'
+import { Status } from 'type'
+import { getStatusConfig } from 'utils/common'
 
 export default function StatusLabel({ status }: { status: Status }) {
   const { color, text } = getStatusConfig(status)

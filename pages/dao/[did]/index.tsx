@@ -1,12 +1,12 @@
 import { Box } from 'grommet'
 import { useRouter } from 'next/router'
-import IssueList from '../../../components/Issue/List'
-import CategoryCount from '../../../components/Common/CategoryCount'
-import StatusCount from '../../../components/Common/StatusCount'
-import Layout from '../../../components/Layout'
-import { useDAOviewMethod } from '../../../hooks/query'
-import { DAOMethod, Status } from '../../../type'
-import DAOIntro from '../../../components/DAO/Intro'
+import IssueList from 'components/Issue/List'
+import CategoryCount from 'components/Common/CategoryCount'
+import StatusCount from 'components/Common/StatusCount'
+import Layout from 'components/Layout'
+import { useDAOviewMethod } from 'hooks/query'
+import { DAOMethod, Status } from 'type'
+import DAOIntro from 'components/DAO/Intro'
 
 const DAOPage = () => {
   const { query } = useRouter()

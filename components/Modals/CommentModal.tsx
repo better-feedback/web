@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Layer, Box, TextArea, Text, Button } from 'grommet'
-import { Issue, ToastType } from '../../type'
-import { addComment } from '../../utils/contract'
-import { toast } from '../../utils/common'
+import { Issue, ToastType } from 'type'
+import { addComment } from 'utils/contract'
+import { toast } from 'utils/common'
 
 export default function CommentModal({
   issue,

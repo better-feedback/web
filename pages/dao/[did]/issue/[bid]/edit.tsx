@@ -9,12 +9,12 @@ import {
 } from 'grommet'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
-import Layout from '../../../../../components/Layout'
-import { DAOMethod, IssueCategory, ToastType } from '../../../../../type'
-import { createIssue, updateIssue } from '../../../../../utils/contract'
+import Layout from 'components/Layout'
+import { DAOMethod, ToastType } from 'type'
+import { updateIssue } from 'utils/contract'
 import _ from 'lodash'
-import { toast, validateIssueForm } from '../../../../../utils/common'
-import { useDAOviewMethod } from '../../../../../hooks/query'
+import { toast, validateIssueForm } from 'utils/common'
+import { useDAOviewMethod } from 'hooks/query'
 
 export default function EditIssue({}) {
   const router = useRouter()

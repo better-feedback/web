@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { Layer, Box, TextArea, Text, Button, Select, Heading } from 'grommet'
-import { ExLvList, ExperienceLevel, Issue, ToastType } from '../../type'
-import { addComment, issueToBounty } from '../../utils/contract'
-import { toast } from '../../utils/common'
+import { Layer, Box, Text, Button, Select, Heading, TextInput } from 'grommet'
+import { ExLvList, Issue, ToastType } from 'type'
+import { toast } from 'utils/common'
+import { utils } from 'near-api-js'
+import { useAccount } from 'hooks/wallet'
 
 export default function BountyModal({
   issue,
@@ -15,14 +16,25 @@ export default function BountyModal({
   onClose: any
   setIsLoading: any
 }) {
+  const account = useAccount()
   const [exLv, setExLv] = useState(ExLvList[0])
+  const [amount, setAmount] = useState('1')
 
   const onIssueToBounty = () => {
     setIsLoading(true)
-    issueToBounty(daoAddress, issue.id, ExLvList.indexOf(exLv))
+    const _amount = utils.format.parseNearAmount(amount)
+    account
+      .functionCall({
+        contractId: daoAddress,
+        methodName: 'issueToBounty',
+        args: {
+          id: issue.id,
+          exLv: ExLvList.indexOf(exLv),
+        },
+        attachedDeposit: _amount,
+      })
       .then(() => {
         setIsLoading(false)
-        toast(ToastType.SUCCESS, 'Issue to Bounty Successfully')
         onClose()
       })
       .catch((error) => {
@@ -44,6 +56,15 @@ export default function BountyModal({
             options={ExLvList}
             value={exLv}
             onChange={({ option }) => setExLv(option)}
+          />
+        </Box>
+
+        <Box gap="small">
+          <Text weight="bold">Bounty</Text>
+          <TextInput
+            type="number"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
           />
         </Box>
 

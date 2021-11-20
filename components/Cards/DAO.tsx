@@ -2,12 +2,12 @@ import React from 'react'
 import { Box, Card, CardBody, CardFooter, Image, Heading, Text } from 'grommet'
 import dayjs from 'dayjs'
 import router from 'next/router'
-import { useDao, useDAOviewMethod } from '../../hooks/query'
+import { useDao, useDAOviewMethod } from 'hooks/query'
 import { Trash } from 'react-feather'
-import { useAccount } from '../../hooks/wallet'
-import { CONTRACT_NAME } from '../../utils/config'
-import { deleteDAO } from '../../utils/contract'
-import { getDAOName } from '../../utils/common'
+import { useAccount } from 'hooks/wallet'
+import { CONTRACT_NAME } from 'utils/config'
+import { deleteDAO } from 'utils/contract'
+import { getDAOName } from 'utils/common'
 
 const Identifier = ({ children, title, subTitle, size, ...rest }) => (
   <Box gap="small" align="center" {...rest}>

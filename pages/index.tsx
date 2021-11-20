@@ -1,7 +1,7 @@
 import { Box } from 'grommet'
-import DAOCard from '../components/Cards/DAO'
-import Layout from '../components/Layout'
-import { useDaoList } from '../hooks/query'
+import DAOCard from 'components/Cards/DAO'
+import Layout from 'components/Layout'
+import { useDaoList } from 'hooks/query'
 
 export default function Home() {
   const daoList = useDaoList()

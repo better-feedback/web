@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Layer, Box, Button, Text } from 'grommet'
 import { AlertTriangle, CheckCircle, X } from 'react-feather'
 import PubSub from 'pubsub-js'
-import { Toaster, ToastType } from '../../type'
+import { Toaster, ToastType } from 'type'
 
 export default function ToasterContainer() {
   const [noti, setNoti] = useState<Toaster>(null)

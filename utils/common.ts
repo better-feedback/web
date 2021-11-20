@@ -3,13 +3,20 @@ import BN from 'bn.js'
 import {
   BetterDAO,
   Fund,
-  Issue,
   IssueCategory,
   IssueCreation,
   Status,
   ToastType,
-} from '../type'
+} from 'type'
 import { approveIssue, completeIssue, closeIssue, startIssue } from './contract'
+
+export const validateApplyForm = (message: string) => {
+  if (message.trim().length === 0) {
+    toast(ToastType.ERROR, 'Message cannot be empty')
+    return false
+  }
+  return true
+}
 
 export const validateIssueForm = (issue: IssueCreation): boolean => {
   if (!issue.title.trim()) {
@@ -88,7 +95,7 @@ export const getTagColor = (tag: IssueCategory) => {
   }
 }
 
-export const getStatusConfig = (status: Status) => {
+export const getStatusConfig = (status: Status, fundable = false) => {
   switch (status) {
     case Status.Open:
       return {
@@ -113,13 +120,15 @@ export const getStatusConfig = (status: Status) => {
         text: 'Planned',
         actionName: 'Accept',
         color: 'rgba(0, 140, 213, 0.5)',
-        actions: [
-          {
-            icon: 'PlayCircle',
-            nextStatus: Status.InProgress,
-            call: startIssue,
-          },
-        ],
+        actions: fundable
+          ? []
+          : [
+              {
+                icon: 'PlayCircle',
+                nextStatus: Status.InProgress,
+                call: startIssue,
+              },
+            ],
       }
     case Status.Closed:
       return {

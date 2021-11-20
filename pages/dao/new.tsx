@@ -9,11 +9,11 @@ import {
   Text,
 } from 'grommet'
 import { useState } from 'react'
-import TagsInput from '../../components/Common/TagsInput'
-import Layout from '../../components/Layout'
-import { BetterDAO, ToastType } from '../../type'
-import { toast, validateDAOForm } from '../../utils/common'
-import { createDAO } from '../../utils/contract'
+import TagsInput from 'components/Common/TagsInput'
+import Layout from 'components/Layout'
+import { BetterDAO, ToastType } from 'type'
+import { toast, validateDAOForm } from 'utils/common'
+import { createDAO } from 'utils/contract'
 
 const DEFAULT_CATEGORIES = ['Bug', 'Feature Request', 'UI', 'Smart Contract']
 

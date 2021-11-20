@@ -1,8 +1,8 @@
 import { Box, Heading } from 'grommet'
 import router from 'next/router'
-import { Issue } from '../../type'
-import CategoryLabel from '../Common/CategoryLabel'
-import StatusLabel from '../Common/StatusLabel'
+import { Issue } from 'type'
+import CategoryLabel from 'components/Common/CategoryLabel'
+import StatusLabel from 'components/Common/StatusLabel'
 
 export default function IssueItem({
   issue,

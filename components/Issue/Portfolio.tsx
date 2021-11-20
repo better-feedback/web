@@ -1,17 +1,18 @@
 import { Box, Text } from 'grommet'
-import { DollarSign, ThumbsUp } from 'react-feather'
+import { DollarSign, Feather, PlayCircle, ThumbsUp } from 'react-feather'
 import ButtonWrap from './ButtonWrap'
-import { useAccount } from '../../hooks/wallet'
-import { formatTimestamp } from '../../utils/format'
-import { likeIssue } from '../../utils/contract'
+import { useAccount } from 'hooks/wallet'
+import { formatTimestamp } from 'utils/format'
+import { likeIssue, startIssue } from 'utils/contract'
 import Manage from './Manage'
-import StatusLabel from '../Common/StatusLabel'
-import { calcFund, toast } from '../../utils/common'
-import { Status, ToastType } from '../../type'
-import CategoryLabel from '../Common/CategoryLabel'
+import StatusLabel from 'components/Common/StatusLabel'
+import { calcFund, toast } from 'utils/common'
+import { ExLvList, Status, ToastType } from 'type'
+import CategoryLabel from 'components/Common/CategoryLabel'
 import { useState } from 'react'
-import FundModal from './FundModal'
+import FundModal from 'components/Modals/FundModal'
 import { utils } from 'near-api-js'
+import ApplyModal from 'components/Modals/ApplyModal'
 
 const Row = ({ title, value }) => {
   return (
@@ -30,16 +31,10 @@ export default function Portfolio({
 }) {
   const account = useAccount()
   const [isFundModalVisible, setIsFundModalVisible] = useState(false)
+  const [isApplyModalVisible, setIsApplyModalVisible] = useState(false)
 
   if (!issue) {
-    return (
-      <Box
-        direction="column"
-        pad="none"
-        background="white"
-        style={{ flex: '0 0 400px', height: 400, border: '1px solid #333' }}
-      ></Box>
-    )
+    return null
   }
 
   const onLikeIssue = () => {
@@ -55,7 +50,34 @@ export default function Portfolio({
       })
   }
 
+  const onStartIssue = () => {
+    setIsLoading(true)
+    startIssue(daoAddress, issue.id)
+      .then(() => {
+        setTimeout(() => {
+          window.location.reload()
+        }, 1000)
+        setIsLoading(false)
+      })
+      .catch((error) => {
+        setIsLoading(false)
+      })
+  }
+
   const isLiked = issue?.likes?.includes(account?.accountId)
+  const isAppliable =
+    !isCouncil &&
+    issue.fundable &&
+    issue.status === Status.Planned &&
+    !issue?.applicants.some((t) => t.applicant === account?.accountId)
+
+  const isStartable =
+    !isCouncil &&
+    issue.fundable &&
+    issue.status === Status.Planned &&
+    issue?.applicants.some(
+      (t) => t.applicant === account?.accountId && t.approved
+    )
 
   return (
     <Box
@@ -80,12 +102,18 @@ export default function Portfolio({
             title="Bounty"
             value={
               <Box direction="row" align="center" gap="xsmall">
-                <Text color="brand">
+                <Text color="brand" weight="bolder" size="xlarge">
                   {utils.format.formatNearAmount(calcFund(issue?.funds ?? []))}
                 </Text>
-                <Text size="xlarge">Ⓝ</Text>
+                <Text size="xxlarge">Ⓝ</Text>
               </Box>
             }
+          />
+        )}
+        {issue.fundable && (
+          <Row
+            title="Experience Level"
+            value={ExLvList[issue.experienceLevel]}
           />
         )}
       </Box>
@@ -113,6 +141,16 @@ export default function Portfolio({
         )}
       </Box>
 
+      {isAppliable && (
+        <ButtonWrap
+          title="Apply"
+          background="neutral-2"
+          onClick={() => {
+            setIsApplyModalVisible(true)
+          }}
+          icon={<Feather size={20} />}
+        />
+      )}
       {isCouncil && (
         <Manage
           issue={issue}
@@ -121,11 +159,27 @@ export default function Portfolio({
           setIsLoading={setIsLoading}
         />
       )}
+      {isStartable && (
+        <ButtonWrap
+          title="Start"
+          background="neutral-2"
+          onClick={onStartIssue}
+          icon={<PlayCircle size={20} />}
+        />
+      )}
       {isFundModalVisible && (
         <FundModal
           setIsLoading={setIsLoading}
           issue={issue}
           onClose={() => setIsFundModalVisible(false)}
+          daoAddress={daoAddress}
+        />
+      )}
+      {isApplyModalVisible && (
+        <ApplyModal
+          setIsLoading={setIsLoading}
+          issue={issue}
+          onClose={() => setIsApplyModalVisible(false)}
           daoAddress={daoAddress}
         />
       )}
