@@ -101,6 +101,13 @@ export default function Portfolio({
       (t) => t.applicant === account?.accountId && t.approved && !t.claimed
     )
 
+  let hunter = null
+  if (issue.fundable) {
+    hunter = issue?.applicants.find(
+      (t) => t.applicant === account?.accountId && t.approved
+    )
+  }
+
   return (
     <Box
       direction="column"
@@ -137,6 +144,10 @@ export default function Portfolio({
             title="Experience Level"
             value={ExLvList[issue.experienceLevel]}
           />
+        )}
+        {hunter && <Row title="Hunter" value={hunter.applicant} />}
+        {hunter && (
+          <Row title="Claimed?" value={hunter.claimed ? 'YES' : 'NO'} />
         )}
       </Box>
 
