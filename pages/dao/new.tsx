@@ -19,9 +19,9 @@ const DEFAULT_CATEGORIES = ['Bug', 'Feature Request', 'UI', 'Smart Contract']
 
 export default function DAONew({}) {
   const [dao, setDAO] = useState<BetterDAO>({
-    name: 'btc',
-    projectUrl: 'https://bitcoin.org/',
-    logoUrl: 'https://cryptologos.cc/logos/bitcoin-btc-logo.svg',
+    name: '',
+    projectUrl: '',
+    logoUrl: '',
     description: '',
   })
   const [categories, setCategories] = useState<string[]>(DEFAULT_CATEGORIES)

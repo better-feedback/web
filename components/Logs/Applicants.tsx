@@ -41,7 +41,7 @@ export default function Applicants({
       {applicants.map((applicant, index) => {
         return (
           <Box direction="row" gap="medium" pad="medium">
-            <Box>
+            <Box style={{ flex: '0 0 120px' }}>
               <Text size="small">{formatTimestamp(applicant.timestamp)}</Text>
               <Text size="small">
                 {formatTimestamp(applicant.timestamp, 'HH:MM:ss')}
@@ -51,7 +51,7 @@ export default function Applicants({
               flex="grow"
               gap="small"
               pad={{ bottom: 'small' }}
-              style={{ borderBottom: '1px solid #e3e3e3' }}
+              style={{ borderBottom: '1px solid #e3e3e3', maxWidth: 600 }}
             >
               <Box direction="row" gap="small" align="center">
                 {applicant.approved ? (

@@ -122,3 +122,8 @@ export const approveApplicant = async (
   const contract = (await getDAOContract(daoAddress)) as any
   await contract.approveApplicant({ id: issueId, applicantId })
 }
+
+export const claimBounty = async (daoAddress: string, issueId: number) => {
+  const contract = (await getDAOContract(daoAddress)) as any
+  await contract.claimBounty({ id: issueId })
+}

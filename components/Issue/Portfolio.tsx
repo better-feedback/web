@@ -1,9 +1,9 @@
 import { Box, Text } from 'grommet'
-import { DollarSign, Feather, PlayCircle, ThumbsUp } from 'react-feather'
+import { DollarSign, Feather, Gift, PlayCircle, ThumbsUp } from 'react-feather'
 import ButtonWrap from './ButtonWrap'
 import { useAccount } from 'hooks/wallet'
 import { formatTimestamp } from 'utils/format'
-import { likeIssue, startIssue } from 'utils/contract'
+import { claimBounty, likeIssue, startIssue } from 'utils/contract'
 import Manage from './Manage'
 import StatusLabel from 'components/Common/StatusLabel'
 import { calcFund, toast } from 'utils/common'
@@ -64,6 +64,20 @@ export default function Portfolio({
       })
   }
 
+  const onClaimBounty = () => {
+    setIsLoading(true)
+    claimBounty(daoAddress, issue.id)
+      .then(() => {
+        setTimeout(() => {
+          window.location.reload()
+        }, 1000)
+        setIsLoading(false)
+      })
+      .catch((error) => {
+        setIsLoading(false)
+      })
+  }
+
   const isLiked = issue?.likes?.includes(account?.accountId)
   const isAppliable =
     !isCouncil &&
@@ -77,6 +91,14 @@ export default function Portfolio({
     issue.status === Status.Planned &&
     issue?.applicants.some(
       (t) => t.applicant === account?.accountId && t.approved
+    )
+
+  const isClaimable =
+    !isCouncil &&
+    issue.fundable &&
+    issue.status === Status.Completed &&
+    issue?.applicants.some(
+      (t) => t.applicant === account?.accountId && t.approved && !t.claimed
     )
 
   return (
@@ -165,6 +187,14 @@ export default function Portfolio({
           background="neutral-2"
           onClick={onStartIssue}
           icon={<PlayCircle size={20} />}
+        />
+      )}
+      {isClaimable && (
+        <ButtonWrap
+          title="Claim"
+          background="neutral-2"
+          onClick={onClaimBounty}
+          icon={<Gift size={20} />}
         />
       )}
       {isFundModalVisible && (
