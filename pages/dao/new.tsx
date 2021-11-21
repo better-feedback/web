@@ -42,7 +42,6 @@ export default function DAONew({}) {
 
     const _amount = utils.format.parseNearAmount('1')
     if (account) {
-      // return
       const args = Buffer.from(
         JSON.stringify({
           projectUrl: dao.projectUrl,

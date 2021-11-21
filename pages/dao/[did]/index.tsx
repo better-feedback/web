@@ -7,6 +7,7 @@ import Layout from 'components/Layout'
 import { useDAOviewMethod } from 'hooks/query'
 import { DAOMethod, Status } from 'type'
 import DAOIntro from 'components/DAO/Intro'
+import { getDAOName } from 'utils/common'
 
 const DAOPage = () => {
   const { query } = useRouter()
@@ -25,7 +26,7 @@ const DAOPage = () => {
   )
 
   return (
-    <Layout title={daoAddress}>
+    <Layout title={getDAOName(daoAddress)}>
       <Box direction="column" align="center" justify="center">
         <DAOIntro daoAddress={daoAddress} />
 
