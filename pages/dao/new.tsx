@@ -89,7 +89,7 @@ export default function DAONew({}) {
         >
           <Text weight="bold">DAO name</Text>
           <TextInput
-            placeholder="will be prefix of .better.near"
+            placeholder={`will be prefix of ${CONTRACT_NAME}`}
             id="name"
             name="name"
             style={{ marginBottom: 10, marginTop: 5 }}
