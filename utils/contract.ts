@@ -3,7 +3,7 @@ import { BetterDAO, ExperienceLevel } from 'type'
 import { getDAOContract, getFactoryContract } from './wallet'
 import _ from 'lodash'
 import router from 'next/router'
-import { CONTRACT_NAME } from './config'
+import { getContractName } from './config'
 
 export const createDAO = async (dao: BetterDAO) => {
   const contract = (await getFactoryContract()) as any
@@ -18,7 +18,7 @@ export const createDAO = async (dao: BetterDAO) => {
     new BN('300000000000000'),
     new BN('0')
   )
-  router.push(`/dao/${dao.name}.${CONTRACT_NAME}`)
+  router.push(`/dao/${dao.name}.${getContractName()}`)
 }
 
 export const updateDAO = async (

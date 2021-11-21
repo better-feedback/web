@@ -13,10 +13,9 @@ import TagsInput from 'components/Common/TagsInput'
 import Layout from 'components/Layout'
 import { BetterDAO, ToastType } from 'type'
 import { toast, validateDAOForm } from 'utils/common'
-import { createDAO } from 'utils/contract'
 import BN from 'bn.js'
 import { useAccount } from 'hooks/wallet'
-import { CONTRACT_NAME } from 'utils/config'
+import { getContractName } from 'utils/config'
 import { utils } from 'near-api-js'
 import { useRouter } from 'next/router'
 
@@ -52,7 +51,7 @@ export default function DAONew({}) {
       ).toString('base64')
       account
         .functionCall({
-          contractId: CONTRACT_NAME,
+          contractId: getContractName(),
           methodName: 'create',
           args: {
             name: dao.name,
@@ -89,7 +88,7 @@ export default function DAONew({}) {
         >
           <Text weight="bold">DAO name</Text>
           <TextInput
-            placeholder={`will be prefix of ${CONTRACT_NAME}`}
+            placeholder={`will be prefix of ${getContractName()}`}
             id="name"
             name="name"
             style={{ marginBottom: 10, marginTop: 5 }}

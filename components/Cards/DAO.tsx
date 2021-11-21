@@ -2,10 +2,10 @@ import React from 'react'
 import { Box, Card, CardBody, CardFooter, Image, Heading, Text } from 'grommet'
 import dayjs from 'dayjs'
 import router from 'next/router'
-import { useDao, useDAOviewMethod } from 'hooks/query'
+import { useDAOviewMethod } from 'hooks/query'
 import { Trash } from 'react-feather'
 import { useAccount } from 'hooks/wallet'
-import { CONTRACT_NAME } from 'utils/config'
+import { getContractName } from 'utils/config'
 import { deleteDAO } from 'utils/contract'
 import { getDAOName } from 'utils/common'
 
@@ -37,7 +37,7 @@ function DAOCard({ name }: { name: string }) {
         router.push(`/dao/${name}`)
       }}
     >
-      {account?.accountId === CONTRACT_NAME && (
+      {account?.accountId === getContractName() && (
         <Trash
           color="white"
           style={{ position: 'absolute', right: 10, top: 10 }}
