@@ -8,16 +8,22 @@ import {
   MaskedInput,
   Text,
 } from 'grommet'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import TagsInput from 'components/Common/TagsInput'
 import Layout from 'components/Layout'
 import { BetterDAO, ToastType } from 'type'
 import { toast, validateDAOForm } from 'utils/common'
 import { createDAO } from 'utils/contract'
+import BN from 'bn.js'
+import { useAccount } from 'hooks/wallet'
+import { CONTRACT_NAME } from 'utils/config'
+import { utils } from 'near-api-js'
+import { useRouter } from 'next/router'
 
 const DEFAULT_CATEGORIES = ['Bug', 'Feature Request', 'UI', 'Smart Contract']
 
 export default function DAONew({}) {
+  const account = useAccount()
   const [dao, setDAO] = useState<BetterDAO>({
     name: '',
     projectUrl: '',
@@ -33,15 +39,46 @@ export default function DAONew({}) {
     }
 
     setIsLoading(true)
-    createDAO({ ...dao, categories })
-      .then(() => {
-        setIsLoading(false)
-      })
-      .catch((error) => {
-        toast(ToastType.ERROR, error.message)
-        setIsLoading(false)
-      })
+
+    const _amount = utils.format.parseNearAmount('1')
+    if (account) {
+      // return
+      const args = Buffer.from(
+        JSON.stringify({
+          projectUrl: dao.projectUrl,
+          logoUrl: dao.logoUrl,
+          description: dao.description,
+          categories,
+        })
+      ).toString('base64')
+      account
+        .functionCall({
+          contractId: CONTRACT_NAME,
+          methodName: 'create',
+          args: {
+            name: dao.name,
+            args,
+          },
+          gas: new BN('300000000000000'),
+          attachedDeposit: _amount,
+        })
+        .then(() => {
+          setIsLoading(false)
+        })
+        .catch((error) => {
+          toast(ToastType.ERROR, error.message)
+          setIsLoading(false)
+        })
+    }
   }
+
+  const router = useRouter()
+  useEffect(() => {
+    if (router.query.transactionHashes) {
+      router.replace('/')
+    }
+  }, [router.query])
+
   return (
     <Layout title="New DAO" isLoading={isLoading}>
       <Box direction="column" align="center" gap="small">

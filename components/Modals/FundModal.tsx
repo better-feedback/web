@@ -22,23 +22,25 @@ export default function FundModal({
   const onFundIssue = () => {
     setIsLoading(true)
     const _amount = utils.format.parseNearAmount(amount)
-    account
-      .functionCall({
-        contractId: daoAddress,
-        methodName: 'fundIssue',
-        args: {
-          id: issue.id,
-        },
-        attachedDeposit: _amount,
-      })
-      .then(() => {
-        setIsLoading(false)
-        onClose()
-      })
-      .catch((error) => {
-        toast(ToastType.ERROR, error.message)
-        setIsLoading(false)
-      })
+    if (account) {
+      account
+        .functionCall({
+          contractId: daoAddress,
+          methodName: 'fundIssue',
+          args: {
+            id: issue.id,
+          },
+          attachedDeposit: _amount,
+        })
+        .then(() => {
+          setIsLoading(false)
+          onClose()
+        })
+        .catch((error) => {
+          toast(ToastType.ERROR, error.message)
+          setIsLoading(false)
+        })
+    }
   }
 
   return (

@@ -22,6 +22,8 @@ export default function DAOIntro({ daoAddress }) {
     []
   )
 
+  console.log(council)
+
   const isCouncil = council.includes(account?.accountId)
 
   return (
