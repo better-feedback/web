@@ -1,15 +1,7 @@
-import {
-  connect,
-  keyStores,
-  WalletConnection,
-  Contract,
-  providers,
-  Account,
-  Connection,
-} from 'near-api-js'
-import { getConfig, CONTRACT_NAME } from './config'
+import { connect, keyStores, WalletConnection, Contract } from 'near-api-js'
+import { getConfig, getContractName } from './config'
 
-const nearConfig = getConfig('testnet')
+const nearConfig = getConfig()
 // const provider = new providers.JsonRpcProvider(nearConfig.nodeUrl)
 
 const getNearWallet = async () => {
@@ -37,7 +29,7 @@ export const getAccount = async () => {
 export const connectWallet = async () => {
   const { wallet } = await getNearWallet()
   wallet.requestSignIn(
-    CONTRACT_NAME, // contract requesting access
+    getContractName(), // contract requesting access
     'Better' // optional
     // "http://YOUR-URL.com/success", // optional
     // "http://YOUR-URL.com/failure" // optional
@@ -48,7 +40,7 @@ export const connectWallet = async () => {
 export const getFactoryContract = async () => {
   const { wallet } = await getNearWallet()
   const account = wallet.account()
-  const contract = new Contract(account, CONTRACT_NAME, {
+  const contract = new Contract(account, getContractName(), {
     viewMethods: ['getDaoList'],
     changeMethods: ['create', 'deleteDAO'],
   })
@@ -91,6 +83,8 @@ export const getDAOContract = async (daoName: string) => {
       'approveApplicant',
       'claimBounty',
       'revokeApplicant',
+      'addCouncilMember',
+      'removeCouncilMember',
     ],
   })
 
