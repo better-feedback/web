@@ -61,6 +61,7 @@ export default function DAONew({}) {
           attachedDeposit: _amount,
         })
         .then(() => {
+          router.replace('/')
           setIsLoading(false)
         })
         .catch((error) => {

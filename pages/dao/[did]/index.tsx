@@ -8,10 +8,12 @@ import { useDAOviewMethod } from 'hooks/query'
 import { DAOMethod, Status } from 'type'
 import DAOIntro from 'components/DAO/Intro'
 import { getDAOName } from 'utils/common'
+import { useState } from 'react'
 
 const DAOPage = () => {
   const { query } = useRouter()
   const daoAddress = query.did as string
+  const [isLoading, setIsLoading] = useState(false)
   const issues = useDAOviewMethod(
     daoAddress,
     DAOMethod.getIssues,
@@ -26,9 +28,9 @@ const DAOPage = () => {
   )
 
   return (
-    <Layout title={getDAOName(daoAddress)}>
+    <Layout title={getDAOName(daoAddress)} isLoading={isLoading}>
       <Box direction="column" align="center" justify="center">
-        <DAOIntro daoAddress={daoAddress} />
+        <DAOIntro daoAddress={daoAddress} setIsLoading={setIsLoading} />
 
         <Box direction="row" wrap align="center" justify="center" width="90%">
           {categories.map((category, index) => {

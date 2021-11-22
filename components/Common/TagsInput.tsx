@@ -72,7 +72,7 @@ const TagsInput = ({ value = [], onAdd, onChange, onRemove, ...rest }) => {
         ref={boxRef}
       >
         {value.length > 0 && renderValue()}
-        <Box flex style={{ minWidth: '120px' }}>
+        <Box style={{ minWidth: 300, marginTop: 8 }}>
           <TextInput
             type="search"
             placeholder="Add your custom catgories"
@@ -82,6 +82,7 @@ const TagsInput = ({ value = [], onAdd, onChange, onRemove, ...rest }) => {
             onChange={updateCurrentTag}
             value={currentTag}
             onSuggestionSelect={(event) => onAddTag(event.suggestion)}
+            style={{ width: 400 }}
           />
         </Box>
       </Box>

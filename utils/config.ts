@@ -3,7 +3,7 @@ export const getContractName = (): string => {
   return env === 'testnet' ? 'betterhq.testnet' : 'better.near'
 }
 
-const getEnv = (): string => {
+export const getEnv = (): string => {
   if (typeof window !== 'undefined') {
     const href = window.location.href
     return /near-testnet/.test(href) || /localhost/.test(href)

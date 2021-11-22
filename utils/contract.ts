@@ -136,3 +136,19 @@ export const claimBounty = async (daoAddress: string, issueId: number) => {
   const contract = (await getDAOContract(daoAddress)) as any
   await contract.claimBounty({ id: issueId })
 }
+
+export const addCouncilMember = async (
+  daoAddress: string,
+  accountId: string
+) => {
+  const contract = (await getDAOContract(daoAddress)) as any
+  await contract.addCouncilMember({ account: accountId })
+}
+
+export const removeCouncilMember = async (
+  daoAddress: string,
+  accountId: string
+) => {
+  const contract = (await getDAOContract(daoAddress)) as any
+  await contract.removeCouncilMember({ account: accountId })
+}
