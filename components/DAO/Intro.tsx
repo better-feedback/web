@@ -51,7 +51,12 @@ export default function DAOIntro({ daoAddress, setIsLoading }) {
                 style={{ whiteSpace: 'nowrap' }}
               />
             )}
-            <Text size="small">{dao?.description}</Text>
+            <Text
+              size="small"
+              style={{ whiteSpace: 'pre-wrap', maxWidth: 600 }}
+            >
+              {dao?.description}
+            </Text>
             {dao && (
               <Box direction="row" align="center">
                 <Text weight="bold">Council:</Text>
