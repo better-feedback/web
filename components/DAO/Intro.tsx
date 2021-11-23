@@ -1,21 +1,18 @@
 import { Box, Heading, Image, Button, Text, Anchor } from 'grommet'
 import { getDAOName } from 'utils/common'
-import { Edit, Edit2, Edit3, Link, Plus, PlusCircle } from 'react-feather'
+import { Edit, Link, Plus, Settings } from 'react-feather'
 import router from 'next/router'
 import { useDAOviewMethod } from 'hooks/query'
 import { DAOMethod } from 'type'
 import { useAccount } from 'hooks/wallet'
 import { useState } from 'react'
 import CouncilManageModal from '../Modals/CouncilManageModal'
-import CouncilAddModal from '../Modals/CouncilAddModal'
 
 export default function DAOIntro({ daoAddress, setIsLoading }) {
   const account = useAccount()
   const [isCouncilManageModalVisible, setIsCouncilManageModalVisible] =
     useState(false)
 
-  const [isCouncilAddModalVisible, setIsCouncilAddModalVisible] =
-    useState(false)
   const dao = useDAOviewMethod(
     daoAddress,
     DAOMethod.getDAOInfo,
@@ -51,7 +48,15 @@ export default function DAOIntro({ daoAddress, setIsLoading }) {
                 style={{ whiteSpace: 'nowrap' }}
               />
             )}
-            <Text size="small">{dao?.description}</Text>
+            {dao?.description && (
+              <Text
+                size="small"
+                style={{ whiteSpace: 'pre-wrap', maxWidth: 600 }}
+              >
+                {dao?.description}
+              </Text>
+            )}
+
             {dao && (
               <Box direction="row" align="center">
                 <Text weight="bold">Council:</Text>
@@ -64,13 +69,8 @@ export default function DAOIntro({ daoAddress, setIsLoading }) {
                   <Box direction="row" pad={{ horizontal: 'xsmall' }}>
                     <Anchor
                       style={{ padding: 4 }}
-                      icon={<Edit size={16} />}
+                      icon={<Settings size={16} />}
                       onClick={() => setIsCouncilManageModalVisible(true)}
-                    />
-                    <Anchor
-                      style={{ padding: 4 }}
-                      icon={<PlusCircle size={16} />}
-                      onClick={() => setIsCouncilAddModalVisible(true)}
                     />
                   </Box>
                 )}
@@ -103,14 +103,6 @@ export default function DAOIntro({ daoAddress, setIsLoading }) {
       </Box>
       {isCouncilManageModalVisible && (
         <CouncilManageModal
-          council={dao?.council}
-          daoAddress={daoAddress}
-          onClose={() => setIsCouncilManageModalVisible(false)}
-          setIsLoading={setIsLoading}
-        />
-      )}
-      {isCouncilAddModalVisible && (
-        <CouncilAddModal
           council={dao?.council}
           daoAddress={daoAddress}
           onClose={() => setIsCouncilManageModalVisible(false)}

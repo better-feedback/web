@@ -14,13 +14,15 @@ import {
   Anchor,
   Image,
   Main,
+  TextInput,
 } from 'grommet'
 import { useAccount } from 'hooks/wallet'
 import { connectWallet } from 'utils/wallet'
 import { useRouter } from 'next/router'
-import { Plus } from 'react-feather'
+import { Plus, Search } from 'react-feather'
 import LoadingMask from 'components/Common/LoadingMask'
 import ToasterContainer from 'components/Common/ToasterContainer'
+import DAOSearch from './DAOSearch'
 
 interface Props {
   title: string
@@ -32,7 +34,6 @@ interface Props {
 const Layout = ({ title, children, mainWidth, isLoading }: Props) => {
   const account = useAccount()
   const router = useRouter()
-  const [noti, setNoti] = useState(null)
 
   return (
     <Grommet theme={grommet} full>
@@ -59,6 +60,8 @@ const Layout = ({ title, children, mainWidth, isLoading }: Props) => {
           label=""
         />
         <Box align="center" justify="end" direction="row" gap="medium">
+          <DAOSearch />
+
           <Button
             primary
             color="#333"

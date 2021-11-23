@@ -7,7 +7,6 @@ export const useDaoList = (): string[] => {
 
   useEffect(() => {
     getFactoryContract().then((contract: any) => {
-      console.log('--- getDaoList ---', contract)
       contract
         .getDaoList()
         .then((daos: string[]) => {
