@@ -8,6 +8,7 @@ import Layout from 'components/Layout'
 import { useDAOviewMethod } from 'hooks/query'
 import { DAOMethod, Issue, StatusList } from 'type'
 import { getDAOName } from 'utils/common'
+import { getContractName } from 'utils/config'
 
 function filterIssues(issues: Issue[], status: number, category: string) {
   let _issues = issues
@@ -23,7 +24,7 @@ function filterIssues(issues: Issue[], status: number, category: string) {
 
 export default function IssuesPage() {
   const { query } = useRouter()
-  const daoAddress = query.did as string
+  const daoAddress = getContractName()
   const _category = query.category as string
   const _status = query.status as string
   const [isInitial, setIsInitial] = useState(false)

@@ -5,6 +5,7 @@ import { Applicant, ToastType } from 'type'
 import { approveApplicant, revokeApplicant } from 'utils/contract'
 import { formatTimestamp } from 'utils/format'
 import { toast } from 'utils/common'
+import { getContractName } from 'utils/config'
 
 export default function Applicants({
   applicants,
@@ -16,7 +17,7 @@ export default function Applicants({
   setIsLoading: any
 }) {
   const { query } = useRouter()
-  const daoAddress = query.did as string
+  const daoAddress = getContractName()
   const issueId = query.bid as string
 
   const isSomeoneApproved = applicants.some((app) => app.approved)

@@ -1,6 +1,6 @@
 export const getContractName = (): string => {
   const env = getEnv()
-  return env === 'testnet' ? 'betterhq.testnet' : 'better.near'
+  return env === 'testnet' ? 'better.betterhq.testnet' : 'better.better.near'
 }
 
 export const getEnv = (): string => {

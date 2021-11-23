@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/google-font-display */
 /* eslint-disable @next/next/no-sync-scripts */
 /* eslint-disable @next/next/no-html-link-for-pages */
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import Head from 'next/head'
 import {
   Box,
@@ -14,15 +14,13 @@ import {
   Anchor,
   Image,
   Main,
-  TextInput,
 } from 'grommet'
 import { useAccount } from 'hooks/wallet'
 import { connectWallet } from 'utils/wallet'
 import { useRouter } from 'next/router'
-import { Plus, Search } from 'react-feather'
+import { Plus } from 'react-feather'
 import LoadingMask from 'components/Common/LoadingMask'
 import ToasterContainer from 'components/Common/ToasterContainer'
-import DAOSearch from './DAOSearch'
 
 interface Props {
   title: string
@@ -60,8 +58,6 @@ const Layout = ({ title, children, mainWidth, isLoading }: Props) => {
           label=""
         />
         <Box align="center" justify="end" direction="row" gap="medium">
-          <DAOSearch />
-
           <Button
             primary
             color="#333"

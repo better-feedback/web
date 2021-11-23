@@ -10,11 +10,12 @@ import { useAccount } from 'hooks/wallet'
 import { ChevronRight } from 'react-feather'
 import { DAOMethod } from 'type'
 import IssueDetail from 'components/Issue/Detail'
+import { getContractName } from 'utils/config'
 
 const DAOPage = () => {
   const account = useAccount()
   const { query } = useRouter()
-  const daoAddress = query.did as string
+  const daoAddress = getContractName()
   const issueId = query.bid as string
   const params = useMemo(() => ({ id: Number(issueId) }), [issueId])
 

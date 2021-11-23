@@ -8,80 +8,68 @@ import {
   MaskedInput,
   Text,
 } from 'grommet'
+import router, { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import TagsInput from 'components/Common/TagsInput'
 import Layout from 'components/Layout'
-import { BetterDAO, ToastType } from 'type'
-import { toast, validateDAOForm } from 'utils/common'
-import BN from 'bn.js'
-import { useAccount } from 'hooks/wallet'
+import { useDAOviewMethod } from 'hooks/query'
+import { BetterDAO, DAOMethod, ToastType } from 'type'
+import { getDAOName, toast, validateDAOForm } from 'utils/common'
+import { updateDAO } from 'utils/contract'
 import { getContractName } from 'utils/config'
-import { utils } from 'near-api-js'
-import { useRouter } from 'next/router'
 
-const DEFAULT_CATEGORIES = ['Bug', 'Feature Request', 'UI', 'Smart Contract']
+export default function EditDAO({}) {
+  const { query } = useRouter()
+  const daoAddress = getContractName()
+  const _dao = useDAOviewMethod(
+    daoAddress,
+    DAOMethod.getDAOInfo,
+    undefined,
+    null
+  )
 
-export default function DAONew({}) {
-  const account = useAccount()
   const [dao, setDAO] = useState<BetterDAO>({
     name: '',
     projectUrl: '',
     logoUrl: '',
     description: '',
   })
-  const [categories, setCategories] = useState<string[]>(DEFAULT_CATEGORIES)
+  const [categories, setCategories] = useState<string[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
-  const onCreateDAO = () => {
+  useEffect(() => {
+    if (_dao) {
+      setDAO(_dao)
+      setCategories(_dao.categories)
+    }
+  }, [_dao])
+
+  const onUpdateDAO = () => {
     if (!validateDAOForm({ ...dao, categories })) {
       return
     }
 
     setIsLoading(true)
-
-    const _amount = utils.format.parseNearAmount('1')
-    if (account) {
-      const args = Buffer.from(
-        JSON.stringify({
-          projectUrl: dao.projectUrl,
-          logoUrl: dao.logoUrl,
-          description: dao.description,
-          categories,
-        })
-      ).toString('base64')
-      account
-        .functionCall({
-          contractId: getContractName(),
-          methodName: 'create',
-          args: {
-            name: dao.name,
-            args,
-          },
-          gas: new BN('300000000000000'),
-          attachedDeposit: _amount,
-        })
-        .then(() => {
-          router.replace('/')
-          setIsLoading(false)
-        })
-        .catch((error) => {
-          toast(ToastType.ERROR, error.message)
-          setIsLoading(false)
-        })
-    }
+    updateDAO(
+      daoAddress,
+      dao.projectUrl,
+      dao.logoUrl,
+      dao.description,
+      categories
+    )
+      .then(() => {
+        router.back()
+        setIsLoading(false)
+      })
+      .catch((error) => {
+        toast(ToastType.ERROR, error.message)
+        setIsLoading(false)
+      })
   }
-
-  const router = useRouter()
-  useEffect(() => {
-    if (router.query.transactionHashes) {
-      router.replace('/')
-    }
-  }, [router.query])
-
   return (
-    <Layout title="New DAO" isLoading={isLoading}>
+    <Layout title="Edit the DAO" isLoading={isLoading}>
       <Box direction="column" align="center" gap="small">
-        <Heading level="2">Create new DAO</Heading>
+        <Heading level="2">Edit the DAO</Heading>
         <Form
           value={dao}
           onChange={(nextValue) => setDAO(nextValue)}
@@ -89,9 +77,11 @@ export default function DAONew({}) {
         >
           <Text weight="bold">DAO name</Text>
           <TextInput
-            placeholder={`will be prefix of ${getContractName()}`}
+            placeholder="will be prefix of .better.near"
             id="name"
             name="name"
+            value={getDAOName(daoAddress)}
+            disabled
             style={{ marginBottom: 10, marginTop: 5 }}
           />
           <Text weight="bold">Project URL</Text>
@@ -108,7 +98,6 @@ export default function DAONew({}) {
             id="logoUrl"
             name="logoUrl"
             type="url"
-            placeholder="URL must be end with svg/png/jpeg/jpg"
             style={{ marginBottom: 10, marginTop: 5 }}
           />
 
@@ -142,7 +131,7 @@ export default function DAONew({}) {
               primary
               label="Submit"
               color="#333"
-              onClick={onCreateDAO}
+              onClick={onUpdateDAO}
             />
           </Box>
         </Form>

@@ -6,31 +6,34 @@ import {
   Button,
   TextArea,
   Select,
+  Text,
 } from 'grommet'
 import { useRouter } from 'next/router'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Layout from 'components/Layout'
-import { DAOMethod, ToastType } from 'type'
-import { updateIssue } from 'utils/contract'
+import { DAOMethod, IssueCategory, ToastType } from 'type'
+import { createIssue } from 'utils/contract'
 import _ from 'lodash'
 import { toast, validateIssueForm } from 'utils/common'
 import { useDAOviewMethod } from 'hooks/query'
+import MarkdownIt from 'markdown-it'
+import MdEditor from 'react-markdown-editor-lite'
+import { getContractName } from 'utils/config'
 
-export default function EditIssue({}) {
+const mdParser = new MarkdownIt()
+
+export default function NewIssue({}) {
   const router = useRouter()
-  const daoAddress = router.query.did as string
-  const issueId = router.query.bid as string
+  const daoAddress = getContractName()
   const [isLoading, setIsLoading] = useState(false)
+  const [content, setContent] = useState('')
 
-  const params = useMemo(() => ({ id: Number(issueId) }), [issueId])
   const categories = useDAOviewMethod(
     daoAddress,
     DAOMethod.getCategories,
     undefined,
     []
   )
-  const council = useDAOviewMethod(daoAddress, DAOMethod.getCouncil, params, [])
-  const _issue = useDAOviewMethod(daoAddress, DAOMethod.getIssue, params, null)
   const [issue, setIssue] = useState({
     title: '',
     description: '',
@@ -38,23 +41,29 @@ export default function EditIssue({}) {
   })
 
   useEffect(() => {
-    if (_issue) {
-      setIssue(_issue)
+    if (categories.length > 0 && !issue.category) {
+      setIssue({ ...issue, category: categories[0] })
     }
-  }, [_issue])
+  }, [categories, issue])
 
-  const onUpdateIssue = () => {
-    if (!validateIssueForm(issue)) {
+  const query = router.query
+  useEffect(() => {
+    if (query.transactionHashes) {
+      router.replace(`/dao/${daoAddress}`)
+    }
+  }, [query])
+
+  const onCreateIssue = () => {
+    if (!validateIssueForm({ ...issue, description: content })) {
       return
     }
     setIsLoading(true)
-    updateIssue(daoAddress, {
-      id: _issue.id,
+    createIssue(daoAddress, {
       title: issue.title,
-      description: issue.description,
+      description: content,
       category: issue.category,
     })
-      .then((tx) => {
+      .then(() => {
         router.back()
         setIsLoading(false)
       })
@@ -66,32 +75,41 @@ export default function EditIssue({}) {
   return (
     <Layout title="Create an issue" isLoading={isLoading}>
       <Box direction="column" align="center" gap="small">
-        <Heading level="2">Edit the issue</Heading>
+        <Heading level="2">Create an issue</Heading>
         <Form
           value={issue}
           onChange={(nextValue) => setIssue(nextValue)}
           onSubmit={({ value }) => {}}
-          style={{ width: 500 }}
+          style={{ width: 800 }}
         >
           <TextInput
             placeholder="Bounty title"
             id="title"
             name="title"
-            style={{ marginBottom: 20 }}
+            style={{ marginBottom: 20, background: 'white' }}
             maxLength={100}
           />
-          <TextArea
-            placeholder="Description"
-            id="description"
-            name="description"
-            style={{ marginBottom: 20, height: 160 }}
-            maxLength={2000}
+          <MdEditor
+            style={{ height: '500px', marginBottom: 20 }}
+            renderHTML={(text) => mdParser.render(text)}
+            onChange={({ text }) => {
+              setContent(text)
+            }}
+            view={{ menu: false, md: true, html: true }}
           />
           <Select
             id="category"
             name="category"
-            style={{ width: 450 }}
-            options={categories}
+            style={{ width: 750 }}
+            options={
+              categories || [
+                IssueCategory.BUG,
+                IssueCategory.FEATURE_REQUEST,
+                IssueCategory.SMART_CONTRACT,
+                IssueCategory.UI,
+                IssueCategory.OTHER,
+              ]
+            }
           />
 
           <Box
@@ -106,7 +124,7 @@ export default function EditIssue({}) {
               primary
               label="Submit"
               color="#333"
-              onClick={onUpdateIssue}
+              onClick={onCreateIssue}
             />
           </Box>
         </Form>
