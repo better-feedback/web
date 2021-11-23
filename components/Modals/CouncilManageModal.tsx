@@ -78,9 +78,16 @@ export default function CouncilManageModal({
   return (
     <Layer onClickOutside={onClose}>
       <Box pad="medium" gap="medium" width="600px">
-        <Box direction="row" justify="end">
-          <XCircle color="#999" onClick={onClose} />
-        </Box>
+        <XCircle
+          color="#999"
+          onClick={onClose}
+          style={{
+            position: 'absolute',
+            top: 10,
+            right: 10,
+            cursor: 'pointer',
+          }}
+        />
         <Heading level={3} margin="none">
           Council Manage
         </Heading>

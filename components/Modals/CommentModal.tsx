@@ -27,6 +27,9 @@ export default function CommentModal({
       .then(() => {
         setIsLoading(false)
         onClose()
+        setTimeout(() => {
+          window.location.reload()
+        }, 1000)
       })
       .catch((error) => {
         setIsLoading(false)
@@ -36,11 +39,12 @@ export default function CommentModal({
 
   return (
     <Layer>
-      <Box pad="medium" gap="medium" width="400px">
+      <Box pad="medium" gap="medium" width="600px">
         <Text weight="bold">Comment</Text>
         <TextArea
           value={comment}
           onChange={(e) => setComment(e.target.value)}
+          style={{ height: '200px' }}
         />
         <Box direction="row" justify="around">
           <Button label="Cancel" onClick={onClose} />

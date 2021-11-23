@@ -7,6 +7,7 @@ import {
   TextArea,
   Select,
   Text,
+  Anchor,
 } from 'grommet'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -14,10 +15,11 @@ import Layout from 'components/Layout'
 import { DAOMethod, IssueCategory, ToastType } from 'type'
 import { createIssue } from 'utils/contract'
 import _ from 'lodash'
-import { toast, validateIssueForm } from 'utils/common'
+import { getDAOName, toast, validateIssueForm } from 'utils/common'
 import { useDAOviewMethod } from 'hooks/query'
 import MarkdownIt from 'markdown-it'
 import MdEditor from 'react-markdown-editor-lite'
+import { ChevronRight } from 'react-feather'
 
 const mdParser = new MarkdownIt()
 
@@ -74,7 +76,21 @@ export default function NewIssue({}) {
   return (
     <Layout title="Create an issue" isLoading={isLoading}>
       <Box direction="column" align="center" gap="small">
-        <Heading level="2">Create an issue</Heading>
+        <Box
+          direction="row"
+          align="end"
+          gap="xsmall"
+          width="800px"
+          pad={{ vertical: 'medium' }}
+        >
+          <Anchor
+            label={getDAOName(daoAddress)}
+            href={`/dao/${daoAddress}`}
+            style={{ fontSize: 30 }}
+          />
+          <ChevronRight size={20} color="#999" />
+          <Text>{'Create an issue'}</Text>
+        </Box>
         <Form
           value={issue}
           onChange={(nextValue) => setIssue(nextValue)}

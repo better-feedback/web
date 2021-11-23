@@ -58,7 +58,7 @@ export default function IssuesPage() {
   return (
     <Layout title="">
       <Box pad="small" />
-      <Box direction="row" align="end" gap="xsmall">
+      <Box direction="row" align="end" gap="xsmall" pad={{ left: 'medium' }}>
         <Anchor
           label={getDAOName(daoAddress)}
           href={`/dao/${daoAddress}`}

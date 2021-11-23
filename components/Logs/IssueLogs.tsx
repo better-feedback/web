@@ -11,7 +11,7 @@ function IssueLog({ log, logType }: { log: any; logType: LogType }) {
       gap="medium"
       pad={{ horizontal: 'medium', bottom: 'medium', top: '0px' }}
     >
-      <Box>
+      <Box style={{ flex: '0 0 120px' }}>
         <Text size="small">{formatTimestamp(log.timestamp)}</Text>
         <Text size="small">{formatTimestamp(log.timestamp, 'HH:MM:ss')}</Text>
       </Box>
@@ -19,10 +19,10 @@ function IssueLog({ log, logType }: { log: any; logType: LogType }) {
         flex="grow"
         gap="small"
         pad={{ bottom: 'small' }}
-        style={{ borderBottom: '1px solid #e3e3e3' }}
+        style={{ borderBottom: '1px solid #e3e3e3', width: 500 }}
       >
         <Anchor label={logType === LogType.Fund ? log.funder : log.sender} />
-        <Text>{log.message || 'Fund'}</Text>
+        <Text style={{ whiteSpace: 'pre-wrap' }}>{log.message || 'Fund'}</Text>
         {logType === LogType.Status && <StatusLabel status={log.status} />}
         {logType === LogType.Fund && log && (
           <Box gap="xsmall" direction="row" align="center">
