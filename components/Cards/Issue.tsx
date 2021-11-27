@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
-import { Box, Card, CardBody, CardFooter, Heading, Text } from 'grommet'
-import { ChevronsUp, ChevronUp, ThumbsUp } from 'react-feather'
+import { Box, Heading, Text } from 'grommet'
+import { ChevronUp } from 'react-feather'
 import { DAOMethod, Issue } from 'type'
 import router from 'next/router'
 import { useDAOviewMethod } from 'hooks/query'

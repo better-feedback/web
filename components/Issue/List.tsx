@@ -1,9 +1,8 @@
 import { Box, Heading, Text } from 'grommet'
-import { Smile, TrendingUp } from 'react-feather'
+import { Smile } from 'react-feather'
 import { IssueType, Status } from 'type'
-import { getStatusConfig, hexToRGB } from 'utils/common'
+import { getStatusConfig } from 'utils/common'
 import IssueCard from 'components/Cards/Issue'
-import { useState } from 'react'
 
 export default function IssueList({
   status,
