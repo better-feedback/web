@@ -18,7 +18,7 @@ export const createDAO = async (dao: BetterDAO) => {
     new BN('300000000000000'),
     new BN('0')
   )
-  router.push(`/dao/${dao.name}.${getContractName()}`)
+  router.push(`/`)
 }
 
 export const updateDAO = async (

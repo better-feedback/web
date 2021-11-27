@@ -45,7 +45,7 @@ const DAOPage = () => {
       <Box direction="row" align="end" gap="xsmall">
         <Anchor
           label={getDAOName(daoAddress)}
-          href={`/dao/${daoAddress}`}
+          href={`/`}
           style={{ fontSize: 30 }}
         />
         <ChevronRight size={20} color="#999" />

@@ -55,10 +55,7 @@ export default function IssueDetail({
           }}
         />
         {isCouncil && (
-          <Anchor
-            icon={<Edit />}
-            href={`/dao/${daoAddress}/issue/${issueId}/edit`}
-          />
+          <Anchor icon={<Edit />} href={`/issue/${issueId}/edit`} />
         )}
 
         {isCommenting && (

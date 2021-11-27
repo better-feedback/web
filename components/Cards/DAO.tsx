@@ -34,7 +34,7 @@ function DAOCard({ name }: { name: string }) {
       height="300px"
       style={{ margin: 10, position: 'relative' }}
       onClick={() => {
-        router.push(`/dao/${name}`)
+        router.push(`/`)
       }}
     >
       {account?.accountId === getContractName() && (
