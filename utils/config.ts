@@ -6,7 +6,7 @@ export const getContractName = (): string => {
 export const getEnv = (): string => {
   if (typeof window !== 'undefined') {
     const href = window.location.href
-    return /near-testnet/.test(href) || /localhost/.test(href)
+    return /-testnet/.test(href) || /localhost/.test(href)
       ? 'testnet'
       : 'mainnet'
   }
