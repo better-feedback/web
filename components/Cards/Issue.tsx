@@ -35,7 +35,7 @@ function IssueCard({
       pad="small"
       gap="small"
       onClick={() => {
-        router.push(`/dao/${daoAddress}/issue/${issue.id}`)
+        router.push(`/issue/${issue.id}`)
       }}
     >
       <Box direction="row" align="center">

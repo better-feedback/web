@@ -58,15 +58,15 @@ const Layout = ({ title, children, mainWidth, isLoading }: Props) => {
           label=""
         />
         <Box align="center" justify="end" direction="row" gap="medium">
-          <Button
+          {/* <Button
             primary
             color="#333"
             label="DAO"
             icon={<Plus />}
             onClick={() => {
-              router.push('/dao/new')
+              router.push('/new')
             }}
-          />
+          /> */}
           <Button
             primary
             color="#008cd5"

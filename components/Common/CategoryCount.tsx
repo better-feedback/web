@@ -27,7 +27,7 @@ export default function CategoryCount({
       margin={{ bottom: 'small', horizontal: 'xsmall' }}
       style={{ borderRadius: 4 }}
       onClick={() => {
-        router.push(`/dao/${daoAddress}/issues?category=${category}`)
+        router.push(`/issues?category=${category}`)
       }}
     >
       <Text weight="bold">{category}</Text>

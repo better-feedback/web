@@ -85,7 +85,7 @@ export default function DAOIntro({ daoAddress, setIsLoading }) {
             icon={<Plus />}
             primary
             onClick={() => {
-              router.push(`/dao/${daoAddress}/issue/new`)
+              router.push(`/issue/new`)
             }}
           />
 
@@ -95,7 +95,7 @@ export default function DAOIntro({ daoAddress, setIsLoading }) {
               icon={<Edit />}
               primary
               onClick={() => {
-                router.push(`/dao/${daoAddress}/edit`)
+                router.push(`/edit`)
               }}
             />
           )}

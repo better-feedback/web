@@ -17,7 +17,7 @@ export default function IssueItem({
       pad="small"
       gap="small"
       onClick={() => {
-        router.push(`/dao/${daoAddress}/issue/${issue.id}`)
+        router.push(`/issue/${issue.id}`)
       }}
     >
       <Heading level={4} style={{ maxWidth: 'unset', margin: 0 }}>

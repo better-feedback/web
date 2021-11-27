@@ -49,7 +49,7 @@ export default function NewIssue({}) {
   const query = router.query
   useEffect(() => {
     if (query.transactionHashes) {
-      router.replace(`/dao/${daoAddress}`)
+      router.replace(`/`)
     }
   }, [query])
 

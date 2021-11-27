@@ -27,7 +27,7 @@ export default function StatusCount({
       margin={{ bottom: 'small', horizontal: 'xsmall' }}
       style={{ borderRadius: 4 }}
       onClick={() => {
-        router.push(`/dao/${daoAddress}/issues?status=${StatusList[status]}`)
+        router.push(`/issues?status=${StatusList[status]}`)
       }}
     >
       <Text weight="bold">{StatusList[status]}</Text>
