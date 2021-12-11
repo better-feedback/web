@@ -1,7 +1,7 @@
 import { connect, keyStores, WalletConnection, Contract } from 'near-api-js'
-import { getConfig, getContractName } from './config'
+import { getNearConfig, getContractName } from './config'
 
-const nearConfig = getConfig()
+const nearConfig = getNearConfig()
 // const provider = new providers.JsonRpcProvider(nearConfig.nodeUrl)
 
 const getNearWallet = async () => {
