@@ -13,7 +13,7 @@
     "dayjs": "^1.10.7",
     "grommet": "^2.19.0",
     "lodash": "^4.17.21",
-    "markdown-it": "^12.2.0",
+    "markdown-it": "^12.3.2",
     "near-api-js": "^0.43.1",
     "next": "12.0.4",
     "pubsub-js": "^1.9.4",
